@@ -1,6 +1,6 @@
-<script setup lang="ts">
-import Day from "../components/Day.vue";
-import Sidebar from "../components/Sidebar.vue";
+<script lang="ts" setup>
+import Day from '../components/Day.vue';
+import Sidebar from '../components/Sidebar.vue';
 </script>
 
 <template>
