@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(days, index) in weekView">
+  <div v-for="(days, index) in weekView" class="min-h-fit">
     <DayHeader :date="readableWeekDate[index]" class="z-10" />
     <Day class="z-0" />
   </div>
