@@ -1,5 +1,5 @@
 <template>
-  <div
+<div
     class="row-start-3 row-end-[12] bg-blue-500 col-start-3 col-end-[12] grid-cols-8 grid overflow-y-scroll overflow-x-hidden relative"
   >
     <div class="h-full">
@@ -10,8 +10,8 @@
         </template>
       </Day>
     </div>
-    <div v-for="(days, index) in weekView">
-      <DayHeader :date="readableWeekDate[index]" class="z-10" />
+    <div v-for="(days, index) in weekDates">
+      <DayHeader :date="readableWeekDates[index]" class="z-10" />
       <Day class="z-0" />
     </div>
   </div>
@@ -26,9 +26,7 @@ import {
   convertToReadableWeekDates,
 } from './../components/utils';
 
-const currentWeek = getCurrentWeekDates();
-const readableWeekDate = convertToReadableWeekDates(currentWeek);
-
+const weekDates = getCurrentWeekDates();
+const readableWeekDates = convertToReadableWeekDates(weekDates, true);
 const hours = 23;
-const weekView = getCurrentWeekDates();
 </script>
