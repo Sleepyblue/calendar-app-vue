@@ -8,8 +8,12 @@ export function getCurrentWeekDates(currentDate = new Date()) {
   return currentWeek;
 }
 
-export function convertToReadableWeekDates(currentWeekArray: string[]) {
-  let currentReadableWeek: string[] = [];
+export function convertToReadableWeekDates(
+  currentWeek: string[],
+  shortHand?: boolean
+) {
+  let readableWeekDates: string[] = [];
+
   const options: {} = {
     weekday: 'long',
     year: 'numeric',
@@ -17,11 +21,13 @@ export function convertToReadableWeekDates(currentWeekArray: string[]) {
     day: 'numeric',
   };
 
-  currentWeekArray.forEach((date) => {
-    const readableDay = new Date(date).toLocaleDateString('en-GB', options);
-    currentReadableWeek.push(readableDay);
+  currentWeek.forEach((date) => {
+    let shortDay;
+    const fullDay = new Date(date).toLocaleDateString('en-GB', options);
+    if (shortHand) shortDay = fullDay.slice(0, 3).toUpperCase();
+    readableWeekDates.push(shortDay || fullDay);
   });
-  return currentReadableWeek;
+  return readableWeekDates;
 }
 
 // TODO: Initial brainstorming for week change

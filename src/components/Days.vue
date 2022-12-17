@@ -1,6 +1,6 @@
 <template>
-  <div v-for="(days, index) in weekView">
-    <DayHeader :date="readableWeekDate[index]" class="z-10" />
+  <div v-for="(days, index) in weekDates">
+    <DayHeader :date="readableWeekDates[index]" class="z-10" />
     <Day class="z-0" />
   </div>
 </template>
@@ -13,8 +13,6 @@ import {
   convertToReadableWeekDates,
 } from './../components/utils';
 
-const currentWeek = getCurrentWeekDates();
-const readableWeekDate = convertToReadableWeekDates(currentWeek);
-
-const weekView = getCurrentWeekDates();
+const weekDates = getCurrentWeekDates();
+const readableWeekDates = convertToReadableWeekDates(weekDates, true);
 </script>
