@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full grid grid-cols-12 grid-rows-[repeat(12,minmax(0,1fr))] bg-[#f8673b] overflow-hidden"
+    class="w-full h-full grid grid-cols-12 grid-rows-[repeat(12,minmax(0,1fr))] bg-white overflow-hidden"
   >
     <Days />
     <Sidebar />

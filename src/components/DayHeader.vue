@@ -1,9 +1,16 @@
 <template>
-  <div class="bg-pink-300 top-0 left-0 sticky h-[5%]">{{ date }}</div>
+  <div class="top-0 left-0 sticky h-[5%] mx-[2px] bg-white">
+    <span class="text-black">{{ date }}</span>
+    <span
+      v-if="!isBlank"
+      class="w-11/12 h-[3px] rounded-full bg-black bottom-0 left-0 absolute"
+    ></span>
+  </div>
 </template>
 
 <script lang="ts" setup>
 const props = defineProps({
+  isBlank: Boolean,
   date: String,
 });
 </script>

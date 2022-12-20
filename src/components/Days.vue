@@ -1,10 +1,10 @@
 <template>
-<div
-    class="row-start-3 row-end-[12] bg-blue-500 col-start-3 col-end-[12] grid-cols-8 grid overflow-y-scroll overflow-x-hidden relative"
+  <div
+    class="row-start-3 row-end-[12] col-start-3 col-end-[12] grid-cols-8 grid overflow-y-scroll overflow-x-hidden relative"
   >
     <div class="h-full">
-      <DayHeader class="z-10" />
-      <Day class="z-0">
+      <DayHeader isBlank class="z-10" />
+      <Day isBlank class="z-0">
         <template #hours>
           <Hours v-for="(hour, index) in hours" :hour="index + 1" />
         </template>

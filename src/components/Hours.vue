@@ -1,7 +1,9 @@
 <!-- TODO: Temporary -->
 <template>
-  <div class="h-[48.8281px] border-t relative overflow-visible">
-    <span class="absolute right-0 bottom-[-10.5px]">{{ hour + ':00' }}</span>
+  <div class="h-[48.8281px] relative overflow-visible">
+    <span class="absolute right-0 bottom-[-10.5px] text-black">{{
+      hour + ':00'
+    }}</span>
   </div>
 </template>
 
