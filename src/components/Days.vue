@@ -5,17 +5,25 @@
     <div class="h-full">
       <Day isBlank class="z-0">
         <template #hours>
-          <Hours v-for="(hour, index) in hours" :hour="index + 1" />
+          <Hours
+            v-for="(hour, index) in hours"
+            :hour="index + 1"
+            :key="`hour-${index + 1}`"
+          />
         </template>
       </Day>
     </div>
-    <Day class="z-0" v-for="(days, index) in weekDates" :index="index" />
+    <Day
+      class="z-0"
+      v-for="(days, index) in weekDates"
+      :index="index"
+      :key="`day-${index + 1}`"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import Day from './Day.vue';
-import DayHeader from '../components/DayHeader.vue';
 import Hours from './Hours.vue';
 import { getCurrentWeekDates } from './../components/utils';
 
