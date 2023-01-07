@@ -30,3 +30,18 @@ import { getCurrentWeekDates } from './../components/utils';
 const weekDates = getCurrentWeekDates();
 const hours = 23;
 </script>
+<style scoped>
+*::-webkit-scrollbar {
+  width: 6px;
+  background-color: transparent;
+}
+
+/* *::-webkit-scrollbar-track {
+  background: orange;
+} */
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(229, 231, 235);
+  border-radius: 50px;
+}
+</style>
