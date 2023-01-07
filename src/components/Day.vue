@@ -6,7 +6,7 @@
       :isBlank="isBlank"
     />
     <div
-      class="m-[1px] grid grid-rows-[repeat(24,_minmax(3em,_1fr))] grid-cols-1 bg-[length:100%_48.8281px] h-full"
+      class="m-[1px] grid grid-rows-[repeat(24,_minmax(3em,_1fr))] grid-cols-1 bg-[length:100%_48.8281px] h-full hover:border-2"
       :class="{ 'back_gradient-grid': !isBlank }"
     >
       <slot name="hours"></slot>
@@ -28,10 +28,10 @@ const readableWeekDates = convertToReadableWeekDates(weekDates, true);
 </script>
 
 <style scoped>
-.back_gradient-grid {
+.back_gradient-grid:hover {
   background-image: linear-gradient(
     to bottom,
-    black 0%,
+    rgb(229, 231, 235) 0%,
     transparent 1px,
     transparent 100%
   );

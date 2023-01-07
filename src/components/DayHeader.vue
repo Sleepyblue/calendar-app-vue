@@ -3,7 +3,7 @@
     <span class="text-black">{{ date }}</span>
     <span
       v-if="!isBlank"
-      class="w-11/12 h-[3px] rounded-full bg-black bottom-0 left-0 absolute"
+      class="w-11/12 h-[3px] rounded-full bg-gray-200 bottom-0 left-0 absolute"
     ></span>
   </div>
 </template>
