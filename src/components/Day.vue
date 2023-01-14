@@ -6,8 +6,10 @@
       :isBlank="isBlank"
     />
     <div
-      class="m-[1px] grid grid-rows-[repeat(24,_minmax(3em,_1fr))] grid-cols-1 bg-[length:100%_48.8281px] h-full hover:border-2"
-      :class="{ 'back_gradient-grid': !isBlank }"
+      class="group grid grid-rows-[repeat(24,_minmax(3em,_1fr))] grid-cols-1 bg-[length:100%_48.8281px] h-full border-x border-transparent"
+      :class="{
+        'back_gradient-grid  hover:border-x-gray-200': !isBlank,
+      }"
     >
       <slot name="hours"></slot>
     </div>
