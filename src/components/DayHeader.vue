@@ -1,5 +1,5 @@
 <template>
-  <div class="top-0 left-0 sticky h-[5%] px-1 bg-white">
+  <div class="top-0 left-0 sticky h-[4%] px-1 bg-white">
     <span class="text-black">{{ date }}</span>
     <span
       v-if="!isBlank"
