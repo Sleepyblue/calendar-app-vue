@@ -25,9 +25,9 @@
 <script lang="ts" setup>
 import Day from './Day.vue';
 import Hours from './Hours.vue';
-import { getCurrentWeekDates } from './../components/utils';
+import { getCurrentDates } from './../components/utils';
 
-const weekDates = getCurrentWeekDates();
+const weekDates = getCurrentDates();
 const hours = 23;
 </script>
 <style scoped>
