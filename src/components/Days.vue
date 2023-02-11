@@ -15,7 +15,8 @@
     </div>
     <Day
       class="z-0"
-      v-for="(days, index) in weekDates"
+      v-for="(day, index) in weekDates"
+      :header="day"
       :index="index"
       :key="`day-${index + 1}`"
     />
@@ -25,11 +26,18 @@
 <script lang="ts" setup>
 import Day from './Day.vue';
 import Hours from './Hours.vue';
-import { getCurrentDates } from './../components/utils';
+import {
+  getCurrentDates,
+  convertToReadableWeekDates,
+} from './../components/utils';
+import { useCalendarStore } from '@/stores/calendar';
 
-const weekDates = getCurrentDates();
+const store = useCalendarStore();
+store.view = getCurrentDates();
+const weekDates = convertToReadableWeekDates(store.view, true);
 const hours = 23;
 </script>
+
 <style scoped>
 *::-webkit-scrollbar {
   width: 6px;
