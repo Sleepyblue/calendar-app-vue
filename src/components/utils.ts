@@ -37,10 +37,19 @@ export function setDateInterval(
 }
 
 export function convertToReadableWeekDates(
-  currentWeek: string[],
+  currentWeek: (string | number)[],
   shortHand?: boolean
 ) {
+  const stringsWeekArray: string[] = [];
   let readableWeekDates: string[] = [];
+
+  currentWeek.forEach((date) => {
+    if (typeof date === 'number') {
+      stringsWeekArray.push(new Date(date).toISOString().slice(0, 10));
+    } else {
+      stringsWeekArray.push(date);
+    }
+  });
 
   const options: {} = {
     weekday: 'long',
@@ -49,13 +58,14 @@ export function convertToReadableWeekDates(
     day: 'numeric',
   };
 
-  currentWeek.forEach((date) => {
+  stringsWeekArray.forEach((date) => {
     let shortDay;
     const fullDay = new Date(date).toLocaleDateString('en-GB', options);
     if (shortHand)
       shortDay = fullDay.slice(0, 3).toUpperCase() + ' ' + date.slice(-2);
     readableWeekDates.push(shortDay || fullDay);
   });
+
   return readableWeekDates;
 }
 

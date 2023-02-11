@@ -12,6 +12,7 @@
         <div class="flex items-center gap-2">
           <button
             class="bg-gray-300 shadow-md hover:bg-gray-200 active:bg-amber-700/40 active:shadow-sm active:translate-y-[1px] p-1 rounded-full text-white"
+            @click="moveBackwards"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -40,6 +41,7 @@
           </div>
           <button
             class="bg-gray-300 shadow-md hover:bg-gray-200 active:bg-amber-700/40 active:shadow-sm active:translate-y-[1px] p-1 rounded-full text-white"
+            @click="moveForward"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -73,6 +75,21 @@
 </template>
 
 <script lang="ts" setup>
+import { getCurrentDates, setDateInterval } from '@/components/utils';
+import { useCalendarStore } from '@/stores/calendar';
 import Days from '../components/Days.vue';
 import Sidebar from '../components/Sidebar.vue';
+
+const store = useCalendarStore();
+function moveForward() {
+  const forward = setDateInterval(getCurrentDates() as number[], true);
+  store.view = forward;
+  console.log('forward called', store.view);
+}
+
+function moveBackwards() {
+  const backwards = setDateInterval(getCurrentDates() as number[], true);
+  store.view = backwards;
+  console.log('backward called', store.view);
+}
 </script>
