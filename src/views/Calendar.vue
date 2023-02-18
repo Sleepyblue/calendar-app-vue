@@ -8,7 +8,7 @@
       class="flex flex-col col-start-4 col-end-12 row-span-2 items-start justify-center gap-4"
     >
       <div class="flex text-black items-end gap-4">
-        <p class="text-3xl font-bold leading-7">Jan' 2023</p>
+        <p class="text-3xl font-bold leading-7">{{ month }}</p>
         <div class="flex items-center gap-2">
           <button
             class="bg-gray-300 shadow-md hover:bg-gray-200 active:bg-amber-700/40 active:shadow-sm active:translate-y-[1px] p-1 rounded-full text-white"
@@ -75,21 +75,29 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentDates, setDateInterval } from '@/components/utils';
+import { computed } from 'vue';
 import { useCalendarStore } from '@/stores/calendar';
 import Days from '../components/Days.vue';
 import Sidebar from '../components/Sidebar.vue';
+import { getCurrentDates, setCurrentDates } from '@/components/utils';
 
 const store = useCalendarStore();
+store.view = getCurrentDates();
+
+// TODO: Rework this as an external snippet
+let month = computed(() => {
+  const getWeekStart = new Date(store.view[0]).toDateString();
+  let shortMonth = getWeekStart.slice(4, 7);
+  let year = getWeekStart.slice(-4);
+  return `${shortMonth}' ${year}`;
+});
+
+// TODO: Maybe move this to the 'setCurrentDates'
 function moveForward() {
-  const forward = setDateInterval(getCurrentDates() as number[], true);
-  store.view = forward;
-  console.log('forward called', store.view);
+  store.view = setCurrentDates(store.view, true);
 }
 
 function moveBackwards() {
-  const backwards = setDateInterval(getCurrentDates() as number[], true);
-  store.view = backwards;
-  console.log('backward called', store.view);
+  store.view = setCurrentDates(store.view, false);
 }
 </script>

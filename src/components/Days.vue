@@ -24,18 +24,16 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
+import { useCalendarStore } from '@/stores/calendar';
 import Day from './Day.vue';
 import Hours from './Hours.vue';
-import {
-  getCurrentDates,
-  convertToReadableWeekDates,
-} from './../components/utils';
-import { useCalendarStore } from '@/stores/calendar';
+import { convertToStringDates } from './../components/utils';
 
-const store = useCalendarStore();
-store.view = getCurrentDates();
-const weekDates = convertToReadableWeekDates(store.view, true);
 const hours = 23;
+const store = useCalendarStore();
+
+let weekDates = computed(() => convertToStringDates(store.view, true));
 </script>
 
 <style scoped>
