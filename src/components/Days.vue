@@ -19,16 +19,18 @@
       :header="day"
       :index="index"
       :key="`day-${index + 1}`"
+      @click.prevent="events"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useCalendarStore } from '@/stores/calendar';
+import { useCalendarStore } from '@/stores/calendarStore';
 import Day from './Day.vue';
 import Hours from './Hours.vue';
-import { convertToStringDates } from './../components/utils';
+import { convertToStringDates } from './utils';
+import { events } from './events';
 
 const hours = 23;
 const store = useCalendarStore();

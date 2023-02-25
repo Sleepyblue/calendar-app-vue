@@ -1,3 +1,6 @@
+/**
+ * Outputs an array with dates, comprising the chosen interval, based on current date
+ */
 export function getCurrentDates(days: number = 7) {
   let currentDates = [];
 
@@ -13,33 +16,30 @@ export function getCurrentDates(days: number = 7) {
   return currentDates;
 }
 
+/**
+ * Moves the current calendar view, back and forth, based on the passed interval
+ */
 export function setCurrentDates(
   datesArray: number[],
   forward: boolean = false
 ) {
-  const copyDatesArray: (string | number)[] = [];
+  const copyDatesArray: number[] = [];
   const interval = datesArray.length * 24 * 60 * 60 * 1000;
   datesArray.forEach((date) =>
-    copyDatesArray.push((date as number) + (forward ? +interval : -interval))
+    copyDatesArray.push(date + (forward ? +interval : -interval))
   );
+
   return copyDatesArray;
 }
 
+/**
+ * Converts an array with dates, in miliseconds, to an array with string dates
+ */
 export function convertToStringDates(
-  datesArray: (string | number)[],
+  datesArray: number[],
   shortHand?: boolean
 ) {
   const stringsWeekArray: string[] = [];
-  let readableWeekDates: string[] = [];
-
-  datesArray.forEach((date) => {
-    if (typeof date === 'number') {
-      stringsWeekArray.push(new Date(date).toISOString().slice(0, 10));
-    } else {
-      stringsWeekArray.push(date);
-    }
-  });
-
   const options: {} = {
     weekday: 'long',
     year: 'numeric',
@@ -47,13 +47,16 @@ export function convertToStringDates(
     day: 'numeric',
   };
 
-  stringsWeekArray.forEach((date) => {
-    let shortDay;
-    const fullDay = new Date(date).toLocaleDateString('en-GB', options);
-    if (shortHand)
-      shortDay = fullDay.slice(0, 3).toUpperCase() + ' ' + date.slice(-2);
-    readableWeekDates.push(shortDay || fullDay);
+  datesArray.forEach((date) => {
+    let dateLocale = new Date(date).toLocaleDateString('en-GB', options);
+    let dateISO = new Date(date).toISOString().slice(0, 10);
+
+    stringsWeekArray.push(
+      shortHand
+        ? dateLocale.slice(0, 3).toUpperCase() + ' ' + dateISO.slice(-2)
+        : dateLocale
+    );
   });
 
-  return readableWeekDates;
+  return stringsWeekArray;
 }
