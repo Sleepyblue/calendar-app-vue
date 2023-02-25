@@ -76,7 +76,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useCalendarStore } from '@/stores/calendar';
+import { useCalendarStore } from '@/stores/calendarStore';
 import Days from '../components/Days.vue';
 import Sidebar from '../components/Sidebar.vue';
 import { getCurrentDates, setCurrentDates } from '@/components/utils';
@@ -92,7 +92,6 @@ let month = computed(() => {
   return `${shortMonth}' ${year}`;
 });
 
-// TODO: Maybe move this to the 'setCurrentDates'
 function moveForward() {
   store.view = setCurrentDates(store.view, true);
 }
