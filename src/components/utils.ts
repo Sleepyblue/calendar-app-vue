@@ -37,6 +37,7 @@ export function setCurrentDates(
  */
 export function convertToStringDates(
   datesArray: number[],
+  isoDate?: boolean,
   shortHand?: boolean
 ) {
   const stringsWeekArray: string[] = [];
@@ -51,11 +52,18 @@ export function convertToStringDates(
     let dateLocale = new Date(date).toLocaleDateString('en-GB', options);
     let dateISO = new Date(date).toISOString().slice(0, 10);
 
-    stringsWeekArray.push(
-      shortHand
-        ? dateLocale.slice(0, 3).toUpperCase() + ' ' + dateISO.slice(-2)
-        : dateLocale
-    );
+    if (shortHand) {
+      stringsWeekArray.push(
+        dateLocale.slice(0, 3).toUpperCase() + ' ' + dateISO.slice(-2)
+      );
+      return;
+    } else if (isoDate) {
+      stringsWeekArray.push(dateISO);
+      return;
+    } else {
+      stringsWeekArray.push(dateLocale);
+      return;
+    }
   });
 
   return stringsWeekArray;
