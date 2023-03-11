@@ -5,11 +5,7 @@
     <div class="h-full">
       <Day isBlank class="z-0">
         <template #hours>
-          <Hours
-            v-for="(hour, index) in hours"
-            :hour="index + 1"
-            :key="`hour-${index + 1}`"
-          />
+          <Hours v-for="hour in hours" :hour="hour" :key="hour" />
         </template>
       </Day>
     </div>
@@ -28,7 +24,7 @@ import { computed } from 'vue';
 import { useCalendarStore } from '@/stores/calendarStore';
 import Day from './Day.vue';
 import Hours from './Hours.vue';
-import { convertToStringDates } from './utils';
+import { convertToStringDates } from '@/utils/Dates';
 
 const hours = 23;
 const store = useCalendarStore();
