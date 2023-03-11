@@ -70,16 +70,16 @@
       </div>
     </div>
     <!-- Provisory -->
-    <Days />
+    <View />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useCalendarStore } from '@/stores/calendarStore';
-import Days from '../components/Days.vue';
+import View from '../components/View.vue';
 import Sidebar from '../components/Sidebar.vue';
-import { getCurrentDates, setCurrentDates } from '@/components/utils';
+import { getCurrentDates, setCurrentDates } from '@/utils/Dates';
 
 const store = useCalendarStore();
 store.view = getCurrentDates();
