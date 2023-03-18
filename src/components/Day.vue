@@ -2,7 +2,7 @@
   <div class="h-full" :data-day="day">
     <DayHeader :date="header" :isBlank="isBlank" />
     <div
-      class="group grid grid-rows-[repeat(24,_minmax(3em,_1fr))] grid-cols-1 bg-[length:100%_48.8281px] h-full border-x border-transparent cursor-pointer"
+      class="group grid h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-x border-transparent bg-[length:100%_48.8281px]"
       :class="{
         'back_gradient-grid  hover:border-x-gray-200': !isBlank,
       }"
@@ -13,7 +13,7 @@
       <div
         v-for="event in events"
         v-if="!isBlank"
-        class="w-11/12 h-10 rounded-md border-l-amber-300 border-l-8 shadow-md mx-auto my-0 text-black text-sm"
+        class="mx-auto my-0 h-10 w-11/12 rounded-md border-l-8 border-l-amber-300 text-sm text-black shadow-md"
       >
         {{ event }}
       </div>
