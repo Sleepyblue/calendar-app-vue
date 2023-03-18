@@ -1,6 +1,6 @@
 <template>
   <div
-    class="row-start-3 row-end-[12] col-start-3 col-end-[12] grid-cols-8 grid overflow-y-scroll overflow-x-hidden relative"
+    class="relative col-start-3 col-end-[12] row-start-3 row-end-[12] grid grid-cols-8 overflow-x-hidden overflow-y-scroll"
   >
     <div class="h-full">
       <Day isBlank class="z-0">
