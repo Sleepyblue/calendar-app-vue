@@ -1,35 +1,33 @@
 <template>
   <div class="h-full" :data-day="day">
-    <DayHeader :date="header" :isBlank="isBlank" />
+    <DayHeader :date="header" />
     <div
-      class="group grid h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-x border-transparent bg-[length:100%_48.8281px]"
-      :class="{
-        'back_gradient-grid  hover:border-x-gray-200': !isBlank,
-      }"
+      class="grid h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] first:border-l"
       :id="day"
       @click="eventClick"
     >
-      <slot name="hours"></slot>
       <div
         v-for="event in events"
-        v-if="!isBlank"
         class="mx-auto my-0 h-10 w-11/12 rounded-md border-l-8 border-l-amber-300 text-sm text-black shadow-md"
       >
         {{ event }}
       </div>
+      <div
+        v-for="t in 24"
+        class="box-content border-r border-b border-slate-300 hover:bg-amber-100"
+      ></div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import DayHeader from './DayHeader.vue';
-import { computed } from 'vue';
+import DayHeader from "@cl/components/Calendar/Headers/DayHeader";
 import { useCalendarStore } from '@/stores/calendarStore';
+import { computed } from 'vue';
 
 const props = defineProps({
   day: String,
   header: String,
-  isBlank: Boolean,
 });
 
 const store = useCalendarStore();
