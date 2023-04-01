@@ -15,8 +15,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import CalendarDay from '@cl/components/Calendar/CalendarDay';
-import CalendarHours from '@cl/components/Calendar/CalendarHours';
+import CalendarDay from '@/components/Calendar/CalendarDay';
+import CalendarHours from '@/components/Calendar/CalendarHours';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertToStringDates } from '@/utils/Dates';
 

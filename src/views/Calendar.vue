@@ -75,8 +75,8 @@
 </template>
 
 <script lang="ts" setup>
-import CalendarView from '@cl/components/Calendar/CalendarView';
-import Sidebar from '@cl/components/Sidebar';
+import CalendarView from '@/components/Calendar/CalendarView';
+import Sidebar from '@/components/Sidebar';
 import { computed } from 'vue';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { getCurrentDates, setCurrentDates } from '@/utils/Dates';
