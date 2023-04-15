@@ -10,7 +10,6 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
   },
   "dependencies": {
-    "@cl/components": "file:src/components",
     "pinia": "^2.0.34",
     "vue": "^3.2.47"
   },
