@@ -1,17 +1,17 @@
 <template>
   <div
-    class="grid h-full w-full grid-cols-12 grid-rows-[repeat(12,minmax(0,1fr))] overflow-hidden bg-white"
+    class="grid h-full w-full grid-cols-12 grid-rows-[repeat(12,minmax(0,1fr))] overflow-hidden"
   >
     <Sidebar />
     <!-- Provisory -->
     <div
       class="col-start-4 col-end-12 row-span-2 flex flex-col items-start justify-center gap-4"
     >
-      <div class="flex items-end gap-4 text-black">
+      <div class="flex items-end gap-4 text-white">
         <p class="text-3xl font-bold leading-7">{{ month }}</p>
         <div class="flex items-center gap-2">
           <button
-            class="rounded-full bg-gray-300 p-1 text-white shadow-md hover:bg-gray-200 active:translate-y-[1px] active:bg-amber-700/40 active:shadow-sm"
+            class="rounded-full bg-white p-1 text-black shadow-md hover:bg-gray-200 active:translate-y-[1px] active:bg-amber-400 active:shadow-sm"
             @click="moveBackwards"
           >
             <svg
@@ -26,7 +26,7 @@
               />
             </svg>
           </button>
-          <div class="text-gray-200">
+          <div class="text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="8"
@@ -40,7 +40,7 @@
             </svg>
           </div>
           <button
-            class="rounded-full bg-gray-300 p-1 text-white shadow-md hover:bg-gray-200 active:translate-y-[1px] active:bg-amber-700/40 active:shadow-sm"
+            class="rounded-full bg-white p-1 text-black shadow-md hover:bg-gray-200 active:translate-y-[1px] active:bg-amber-400 active:shadow-sm"
             @click="moveForward"
           >
             <svg
@@ -57,13 +57,13 @@
           </button>
         </div>
       </div>
-      <div class="flex w-full items-center justify-between text-black">
+      <div class="flex w-full items-center justify-between text-white">
         <p class="w-2/5 text-xs">
           Here are all your planned events. You will find information for each
           event and can plan a new one as well
         </p>
         <button
-          class="rounded-lg bg-gray-300 px-6 py-2 font-bold text-white shadow-md hover:bg-gray-200 active:translate-y-[1px] active:bg-amber-700/40 active:shadow-sm"
+          class="rounded-lg bg-white px-6 py-2 font-bold text-black shadow-md hover:bg-gray-200 active:translate-y-[1px] active:bg-amber-400 active:shadow-sm"
         >
           Add Event
         </button>
