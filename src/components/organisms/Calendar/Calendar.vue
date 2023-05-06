@@ -2,8 +2,8 @@
   <div
     class="relative col-start-3 col-end-[12] row-start-3 row-end-[12] grid grid-cols-8 overflow-x-hidden overflow-y-scroll"
   >
-    <CalendarHours class="z-0" />
-    <CalendarDay
+    <Hours class="z-0" />
+    <Day
       class="z-0"
       v-for="(day, index) in weekDates"
       :key="day"
@@ -15,8 +15,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import CalendarDay from '@/components/Calendar/CalendarDay';
-import CalendarHours from '@/components/Calendar/CalendarHours';
+import Day from '@/components/molecules/Day';
+import Hours from '@/components/atoms/Hours';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertToStringDates } from '@/utils/Dates';
 
