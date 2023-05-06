@@ -24,8 +24,8 @@
 </template>
 
 <script lang="ts" setup>
-import DayHeader from '@/components/Calendar/Headers/DayHeader';
-import EventCard from '@/components/Events/EventCard';
+import DayHeader from '@/components/atoms/DayHeader';
+import EventCard from '@/components/atoms/EventCard';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { computed, ref } from 'vue';
 

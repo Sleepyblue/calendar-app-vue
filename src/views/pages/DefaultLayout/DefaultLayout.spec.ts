@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils';
-import Calendar from './Calendar.vue';
+import DefaultLayout from './DefaultLayout.vue';
 
 describe('Initial configuration test', () => {
   it('should render Sidebar component', () => {
-    const wrapper = mount(Calendar);
+    const wrapper = mount(DefaultLayout);
     expect(wrapper.findComponent({ name: 'Sidebar' }).exists()).toBe(true);
   });
 });

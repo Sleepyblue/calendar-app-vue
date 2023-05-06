@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import EventsHeader from '@/components/Calendar/Headers/EventsHeader';
+import EventsHeader from '@/components/atoms/EventsHeader';
 
 const props = defineProps({
   date: String,
