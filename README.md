@@ -1,3 +1,2 @@
-# calendar-app-vue
-
-Using Vue, TypeScript, TailwindCSS to build a calendar application and Vitest to run Unit-tests
+# 🚧💧🌱
+README blossoming shortly! It may be fashionably late, but it'll "spring" into action like a well-timed event
