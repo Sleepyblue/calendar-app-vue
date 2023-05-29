@@ -24,10 +24,11 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, ref } from 'vue';
 import DayHeader from '@/components/atoms/DayHeader';
 import EventCard from '@/components/atoms/EventCard';
 import { useCalendarStore } from '@/stores/calendarStore';
-import { computed, ref } from 'vue';
+import type { CalendarEvent, DayEvent } from '@/types';
 
 const props = defineProps({
   day: String,
@@ -35,23 +36,22 @@ const props = defineProps({
 });
 
 const store = useCalendarStore();
-const dayRef = ref(null);
+const dayRef = ref<HTMLElement | null>(null);
 
-function eventClick(e) {
+function eventClick(e: MouseEvent) {
   const dayId = dayRef.value?.id;
   if (!dayId) return;
 
-  const hour = e.target.dataset.hour;
+  const hour = (e.target as HTMLElement).dataset.hour;
   if (!hour) return;
 
-  // create interface
-  let eventObject = {
+  let eventObject: CalendarEvent = {
     date: '',
     events: [],
   };
 
   eventObject.date = dayId;
-  eventObject.events.push({
+  eventObject.events?.push({
     eventName: 'Event-Test',
     eventHour: hour,
   });
@@ -60,11 +60,10 @@ function eventClick(e) {
 }
 
 const events = computed(() => {
-  // Need the type
-  let events: any[] = [];
+  let events: DayEvent[] = [];
   store.events.forEach((item) => {
     if (props.day === item.date)
-      item.events.forEach((event) => events.push(event));
+      item.events?.forEach((event) => events.push(event));
   });
 
   return events;

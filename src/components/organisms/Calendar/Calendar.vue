@@ -1,9 +1,10 @@
 <template>
   <div
+    id="calendar"
     class="relative col-start-3 col-end-[12] row-start-3 row-end-[12] grid grid-cols-8 overflow-x-hidden overflow-y-scroll"
   >
-    <Hours class="z-0" />
-    <Day
+    <CalendarHours class="z-0" />
+    <CalendarDay
       class="z-0"
       v-for="(day, index) in weekDates"
       :key="day"
@@ -15,8 +16,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import Day from '@/components/molecules/Day';
-import Hours from '@/components/atoms/Hours';
+import CalendarDay from '@/components/molecules/CalendarDay';
+import CalendarHours from '@/components/atoms/CalendarHours';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertToStringDates } from '@/utils/Dates';
 
@@ -28,13 +29,13 @@ const shortWeekDates = computed(() =>
 );
 </script>
 
-<style scoped>
-*::-webkit-scrollbar {
+<style>
+#calendar::-webkit-scrollbar {
   width: 6px;
   background-color: transparent;
 }
 
-*::-webkit-scrollbar-thumb {
+#calendar::-webkit-scrollbar-thumb {
   background-color: rgb(229, 231, 235);
   border-radius: 50px;
 }
