@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Calendar from '@/views/pages/DefaultLayout/DefaultLayout.vue';
+import DefaultLayout from '@/views/pages/DefaultLayout/DefaultLayout.vue';
 </script>
 
 <template>
-  <Calendar />
+  <DefaultLayout />
 </template>
 
-<style scoped></style>
+<style></style>
