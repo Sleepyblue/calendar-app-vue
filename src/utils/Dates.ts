@@ -68,3 +68,17 @@ export function convertToStringDates(
 
   return stringsWeekArray;
 }
+
+export function convertDateToShorthand(date: string) {
+  const options: {} = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+
+  let dateLocale = new Date(date).toLocaleDateString('en-GB', options);
+  let dateISO = new Date(date).toISOString().slice(0, 10);
+
+  return dateLocale.slice(0, 3).toUpperCase() + ' ' + dateISO.slice(-2);
+}

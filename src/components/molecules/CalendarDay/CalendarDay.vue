@@ -1,6 +1,6 @@
 <template>
   <div class="h-full" :data-day="day">
-    <DayHeader :date="header" />
+    <CalendarHeader :shortDate="shortWeekDate" :dateTime="day" />
     <div
       class="calendar-day__grid relative h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] first:border-l"
       :id="day"
@@ -15,7 +15,7 @@
       ></div>
       <EventCard
         v-for="event in events"
-        :event="event.eventName"
+        :eventTitle="event.eventName"
         :hour="event.eventHour"
         class="pointer-events-auto absolute cursor-pointer"
       />
@@ -25,18 +25,20 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import DayHeader from '@/components/atoms/DayHeader';
+import CalendarHeader from '@/components/molecules/CalendarHeader';
 import EventCard from '@/components/atoms/EventCard';
 import { useCalendarStore } from '@/stores/calendarStore';
+import { convertDateToShorthand } from '@/utils/Dates';
 import type { CalendarEvent, DayEvent } from '@/types';
 
-const props = defineProps({
-  day: String,
-  header: String,
-});
+const { day } = defineProps<{
+  day: string;
+}>();
 
 const store = useCalendarStore();
 const dayRef = ref<HTMLElement | null>(null);
+
+const shortWeekDate = computed(() => convertDateToShorthand(day));
 
 function eventClick(e: MouseEvent) {
   const dayId = dayRef.value?.id;
@@ -45,25 +47,32 @@ function eventClick(e: MouseEvent) {
   const hour = (e.target as HTMLElement).dataset.hour;
   if (!hour) return;
 
-  let eventObject: CalendarEvent = {
-    date: '',
-    events: [],
-  };
+  const existingEvent = store.events.find((event) => event.date === dayId);
 
-  eventObject.date = dayId;
-  eventObject.events?.push({
-    eventName: 'Event-Test',
-    eventHour: hour,
-  });
+  if (existingEvent) {
+    existingEvent.events?.push({
+      eventName: 'Event-Test',
+      eventHour: hour,
+    });
+  } else {
+    const eventObject: CalendarEvent = {
+      date: dayId,
+      events: [
+        {
+          eventName: 'Event-Test',
+          eventHour: hour,
+        },
+      ],
+    };
 
-  store.events.push(eventObject);
+    store.events.push(eventObject);
+  }
 }
 
 const events = computed(() => {
   let events: DayEvent[] = [];
   store.events.forEach((item) => {
-    if (props.day === item.date)
-      item.events?.forEach((event) => events.push(event));
+    if (day === item.date) item.events?.forEach((event) => events.push(event));
   });
 
   return events;

@@ -9,7 +9,6 @@
       v-for="(day, index) in weekDates"
       :key="day"
       :day="day"
-      :header="shortWeekDates[index]"
     />
   </div>
 </template>
@@ -22,11 +21,7 @@ import { useCalendarStore } from '@/stores/calendarStore';
 import { convertToStringDates } from '@/utils/Dates';
 
 const store = useCalendarStore();
-
 const weekDates = computed(() => convertToStringDates(store.view, true));
-const shortWeekDates = computed(() =>
-  convertToStringDates(store.view, false, true)
-);
 </script>
 
 <style>
