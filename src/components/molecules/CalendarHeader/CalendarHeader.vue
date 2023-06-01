@@ -1,8 +1,8 @@
 <template>
   <header
-    class="calendar-header sticky left-0 top-0 z-10 h-[4%] place-items-center bg-amber-700"
+    class="calendar-header sticky left-0 top-0 z-10 h-[4%] place-items-center bg-slate-100"
   >
-    <time :datetime="dateTime" class="text-center text-white">
+    <time :datetime="dateTime" class="text-center text-black">
       {{ shortDate }}
     </time>
     <EventHeader
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, computed } from 'vue';
+import { computed } from 'vue';
 import EventHeader from '@/components/atoms/EventHeader';
 import { useCalendarStore } from '@/stores/calendarStore';
 
@@ -37,6 +37,9 @@ const eventHeaders = computed(
   grid-template-areas:
     'header-top'
     'header-bottom';
+  /* -webkit-box-shadow: 0 8px 6px -6px black; */
+  /* -moz-box-shadow: 0 8px 6px -6px black; */
+  box-shadow: 0 2px 1px -2px black;
 }
 
 .calendar-header > time {

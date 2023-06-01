@@ -1,7 +1,7 @@
 <template>
   <div
     id="calendar"
-    class="relative col-start-3 col-end-[12] row-start-3 row-end-[12] grid grid-cols-8 overflow-x-hidden overflow-y-scroll"
+    class="grid grid-cols-8 overflow-x-hidden overflow-y-scroll"
   >
     <CalendarHours class="z-0" />
     <CalendarDay
@@ -9,6 +9,7 @@
       v-for="(day, index) in weekDates"
       :key="day"
       :day="day"
+      :index="index"
     />
   </div>
 </template>
@@ -26,12 +27,25 @@ const weekDates = computed(() => convertToStringDates(store.view, true));
 
 <style>
 #calendar::-webkit-scrollbar {
-  width: 6px;
-  background-color: transparent;
+  width: 18px;
+  background-color: theme('backgroundColor.slate.200');
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 #calendar::-webkit-scrollbar-thumb {
-  background-color: rgb(229, 231, 235);
+  background: linear-gradient(
+    45deg,
+    #f5a278 20%,
+    #f9c7ae 20%,
+    #f9c7ae 40%,
+    #f5a278 40%,
+    #f5a278 60%,
+    #f9c7ae 60%,
+    #f9c7ae 80%,
+    #f5a278 80%
+  );
   border-radius: 50px;
+  border: 6px solid theme('borderColor.slate.200');
 }
 </style>

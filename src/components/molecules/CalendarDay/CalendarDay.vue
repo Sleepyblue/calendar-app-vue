@@ -2,15 +2,17 @@
   <div class="h-full" :data-day="day">
     <CalendarHeader :shortDate="shortWeekDate" :dateTime="day" />
     <div
-      class="calendar-day__grid relative h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] first:border-l"
-      :id="day"
       ref="dayRef"
+      :id="day"
+      class="calendar-day__grid relative h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-r"
+      :class="{ 'border-r-0': index === 6 }"
     >
       <!-- Convert to atom -->
       <div
-        v-for="t in 24"
-        class="hour__grid-area relative border-b border-r border-white hover:bg-amber-100"
+        v-for="(t, index) in 24"
         :data-hour="t"
+        class="hour__grid-area relative flex border-b"
+        :class="{ 'border-b-0': index === 23 }"
         @click="eventClick"
       ></div>
       <EventCard
@@ -33,6 +35,7 @@ import type { CalendarEvent, DayEvent } from '@/types';
 
 const { day } = defineProps<{
   day: string;
+  index: number;
 }>();
 
 const store = useCalendarStore();
@@ -92,5 +95,9 @@ const events = computed(() => {
 
 .hour__grid-area {
   grid-area: 'day';
+}
+
+.hour__grid-area:hover {
+  background-color: rgba(245, 162, 120, 0.4);
 }
 </style>
