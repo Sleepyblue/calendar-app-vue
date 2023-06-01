@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid-position h-10 w-11/12 rounded-md border-l-8 border-l-amber-800 bg-red-800 text-sm text-white shadow-md"
+    class="event-card grid-position flex h-10 w-11/12 items-center justify-center rounded-md border-2 border-l-[6px] border-slate-100 text-sm text-white shadow-md"
   >
     {{ eventTitle }}
   </div>
@@ -16,5 +16,9 @@ const { hour } = defineProps<{
 <style>
 .grid-position {
   grid-row-start: v-bind('hour');
+}
+
+.event-card {
+  background-color: #f5a278;
 }
 </style>

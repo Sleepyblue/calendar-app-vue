@@ -9,7 +9,7 @@
       :key="hour"
       class="relative h-[48.8281px] overflow-visible"
     >
-      <span class="absolute bottom-[-10.5px] right-1/4 text-white">{{
+      <span class="absolute bottom-[-10.5px] right-1/4 text-black">{{
         hour + ':00'
       }}</span>
     </div>

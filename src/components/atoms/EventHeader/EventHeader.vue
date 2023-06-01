@@ -1,5 +1,5 @@
 <template>
-  <button class="w-11/12 min-w-0 rounded-[4px] bg-red-800 px-2">
+  <button class="w-11/12 min-w-0 rounded-[4px] bg-[#f5a278] px-2">
     <div class="overflow-hidden whitespace-nowrap text-sm text-white">
       {{ eventTitle }}
     </div>
