@@ -11,11 +11,10 @@
     >
       <Header />
       <Calendar />
-      <Button
-        :icon="sidebarOpen ? 'SidebarCollapse' : 'SidebarOpen'"
-        class="absolute left-1 top-1 h-6 w-6"
-        @click="sidebarToggle()"
-      />
+      <Button class="absolute left-1 top-1 h-6 w-6" @click="sidebarToggle()">
+        <IconLoader v-if="sidebarOpen" name="SidebarCollapse" />
+        <IconLoader v-else name="SidebarExpand" />
+      </Button>
     </section>
   </div>
 </template>
@@ -25,6 +24,7 @@ import Sidebar from '@/components/organisms/Sidebar';
 import Header from '@/components/organisms/Header';
 import Calendar from '@/components/organisms/Calendar';
 import Button from '@/components/molecules/Button';
+import IconLoader from '@/components/atoms/IconLoader';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const sidebarOpen = ref(true);
