@@ -8,40 +8,54 @@
       @keydown.esc.exact="closeModal"
       @click.self="closeModal"
     >
-      <div class="flex w-1/3 flex-col gap-8 rounded-lg bg-slate-100 p-4">
-        <form class="flex flex-col gap-2">
+      <div
+        class="relative flex w-1/3 flex-col gap-8 rounded-lg bg-slate-100 p-4"
+      >
+        <p
+          v-if="error"
+          class="absolute -top-10 left-0 w-full rounded-xl bg-[#f5a278] p-1 text-center text-white"
+        >
+          {{ error }}
+        </p>
+        <form class="flex flex-col gap-2" ref="formValidation">
           <input
+            ref="titleInput"
             type="text"
             placeholder="Add a title"
-            ref="modalInput"
             class="bg-slate-100 p-1 text-lg"
             v-model.trim="eventTitle"
+            required
           />
           <input
+            ref="dateInput"
             type="date"
             placeholder="Insert a date"
             class="bg-slate-100 p-1"
             v-model="eventDate"
+            required
           />
           <input
+            ref="hourInput"
             type="number"
-            min="0"
-            max="23"
-            placeholder="Insert an hour (0 - 23)"
+            min="1"
+            max="24"
+            placeholder="Insert an hour (1 - 24)"
             class="bg-slate-100 p-1"
             v-model="eventHour"
+            required
           />
         </form>
         <hr />
         <div class="flex justify-end gap-8 align-bottom">
           <Button
             class="rounded-lg bg-slate-100 px-6 py-2 font-bold text-black active:translate-y-[1px]"
-            @click="closeModal"
+            @click.prevent="closeModal"
             >Close</Button
           >
           <Button
             class="rounded-lg bg-[#f5a278] px-6 py-2 font-bold text-white active:translate-y-[1px]"
-            @click="addEvent"
+            type="submit"
+            @click.prevent="addEvent"
             >Create</Button
           >
         </div>
@@ -57,8 +71,10 @@ import type { CalendarEvent } from '@/types';
 import useFocusTrap from '@/composables/useFocusTrap';
 import Button from '@/components/molecules/Button';
 
-const { show } = defineProps<{
+const { show, date, hour } = defineProps<{
   show: boolean;
+  date?: string;
+  hour?: string;
 }>();
 
 const emit = defineEmits<{
@@ -66,11 +82,16 @@ const emit = defineEmits<{
 }>();
 
 const store = useCalendarStore();
-const modalInput = ref<HTMLInputElement | null>(null);
-const eventTitle = ref('');
-const eventDate = ref('');
-const eventHour = ref('');
+const titleInput = ref<HTMLInputElement | null>(null);
+const dateInput = ref<HTMLInputElement | null>(null);
+const hourInput = ref<HTMLInputElement | null>(null);
+const formValidation = ref<HTMLFormElement | null>(null);
+const error = ref('');
 const { trapRef, clearFocusTrap } = useFocusTrap();
+
+const eventTitle = ref('');
+const eventDate = ref(date || '');
+const eventHour = ref(hour || '');
 
 function closeModal() {
   clearFocusTrap();
@@ -78,33 +99,48 @@ function closeModal() {
 }
 
 function addEvent() {
-  // TODO: handle the add event logic
-  const existingEvent = store.events.find(
-    (event) => event.date === eventDate.value
-  );
+  console.log(titleInput.value?.checkValidity());
+  console.log(dateInput.value?.checkValidity());
+  console.log(hourInput.value?.checkValidity());
 
-  if (existingEvent) {
-    existingEvent.events?.push({
-      eventName: eventTitle?.value,
-      eventHour: eventHour.value,
-    });
-  } else {
-    const eventObject: CalendarEvent = {
-      date: eventDate.value,
-      events: [
-        {
-          eventName: eventTitle.value,
-          eventHour: eventHour.value,
-        },
-      ],
-    };
+  if (formValidation.value?.checkValidity()) {
+    const existingEvent = store.events.find(
+      (event) => event.date === eventDate.value
+    );
 
-    store.events.push(eventObject);
+    if (existingEvent) {
+      existingEvent.events?.push({
+        eventName: eventTitle?.value,
+        eventHour: eventHour.value,
+      });
+    } else {
+      const eventObject: CalendarEvent = {
+        date: eventDate.value,
+        events: [
+          {
+            eventName: eventTitle.value,
+            eventHour: (+eventHour.value + 1).toString(),
+          },
+        ],
+      };
+
+      store.events.push(eventObject);
+    }
+
+    closeModal();
+  } else if (!titleInput.value?.checkValidity()) {
+    error.value = `Please add an event title`;
+    return;
+  } else if (!dateInput.value?.checkValidity()) {
+    error.value = `Please add the event's date`;
+    return;
+  } else if (!hourInput.value?.checkValidity()) {
+    error.value = `Please add an hour between 1 and 24`;
   }
 }
 
 onMounted(() => {
-  modalInput.value?.focus();
+  titleInput.value?.focus();
 });
 </script>
 
@@ -121,7 +157,8 @@ onMounted(() => {
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.15);
 }
 
-#modal > div {
+#modal > div,
+#modal p {
   box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.25);
 }
 </style>

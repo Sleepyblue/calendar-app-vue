@@ -1,4 +1,4 @@
-import { CalendarEvent } from '@/types';
+import type { CalendarEvent } from '@/types';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
