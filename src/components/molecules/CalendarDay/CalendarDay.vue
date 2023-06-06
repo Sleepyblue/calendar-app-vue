@@ -2,7 +2,6 @@
   <div class="h-full" :data-day="day">
     <CalendarHeader :shortDate="shortWeekDate" :dateTime="day" />
     <div
-      ref="dayRef"
       :id="day"
       class="calendar-day__grid relative h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-r"
       :class="{ 'border-r-0': index === 6 }"
@@ -13,7 +12,7 @@
         :data-hour="t"
         class="hour__grid-area relative flex border-b"
         :class="{ 'border-b-0': index === 23 }"
-        @click="eventClick"
+        @click="handleModal"
       ></div>
       <EventCard
         v-for="event in events"
@@ -22,6 +21,13 @@
         class="pointer-events-auto absolute cursor-pointer"
       />
     </div>
+    <EventModal
+      v-if="showModal"
+      :show="showModal"
+      :date="date"
+      :hour="hour"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
@@ -29,9 +35,10 @@
 import { computed, ref } from 'vue';
 import CalendarHeader from '@/components/molecules/CalendarHeader';
 import EventCard from '@/components/atoms/EventCard';
+import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertDateToShorthand } from '@/utils/Dates';
-import type { CalendarEvent, DayEvent } from '@/types';
+import type { DayEvent } from '@/types';
 
 const { day } = defineProps<{
   day: string;
@@ -39,36 +46,20 @@ const { day } = defineProps<{
 }>();
 
 const store = useCalendarStore();
-const dayRef = ref<HTMLElement | null>(null);
-
 const shortWeekDate = computed(() => convertDateToShorthand(day));
+const showModal = ref(false);
+const date = ref('');
+const hour = ref('');
 
-function eventClick(e: MouseEvent) {
-  const dayId = dayRef.value?.id;
-  if (!dayId) return;
+function handleModal(e: MouseEvent) {
+  showModal.value = !showModal.value;
 
-  const hour = (e.target as HTMLElement).dataset.hour;
-  if (!hour) return;
+  if (showModal.value) {
+    date.value = day;
+    if (!date) return;
 
-  const existingEvent = store.events.find((event) => event.date === dayId);
-
-  if (existingEvent) {
-    existingEvent.events?.push({
-      eventName: 'Event-Test',
-      eventHour: hour,
-    });
-  } else {
-    const eventObject: CalendarEvent = {
-      date: dayId,
-      events: [
-        {
-          eventName: 'Event-Test',
-          eventHour: hour,
-        },
-      ],
-    };
-
-    store.events.push(eventObject);
+    hour.value = (e.target as HTMLElement).dataset.hour!;
+    if (!hour.value) return;
   }
 }
 
