@@ -1,4 +1,7 @@
-const useCalendarStore = vi.fn();
+const { useCalendarStore } = vi.hoisted(() => {
+  return { useCalendarStore: vi.fn() };
+});
+
 vi.mock('@/stores/calendarStore', () => {
   return {
     useCalendarStore,
@@ -16,13 +19,44 @@ describe('EventModal', () => {
     });
   });
 
-  it('should show the event modal if show prop is true', () => {
+  it('should add the "open" attribute to the dialog element if "show" prop is true', () => {
     const wrapper = mount(EventModal, {
+      global: {
+        stubs: ['teleport'],
+      },
       props: {
         show: true,
       },
     });
 
-    console.log(wrapper.html());
+    expect(wrapper.find('dialog').attributes()).toHaveProperty('open');
+  });
+
+  it('should remove the "open" attribute from the dialog element if "show" prop is false', () => {
+    const wrapper = mount(EventModal, {
+      global: {
+        stubs: ['teleport'],
+      },
+      props: {
+        show: false,
+      },
+    });
+
+    expect(wrapper.find('dialog').attributes()).not.toHaveProperty('open');
+  });
+
+  it('should have the form inputs blank if none of the optional props are passed', () => {
+    const wrapper = mount(EventModal, {
+      global: {
+        stubs: ['teleport'],
+      },
+      props: {
+        show: true,
+      },
+    });
+
+    expect(
+      wrapper.findAll('input').map((input) => input.element.value)
+    ).toMatchObject(['', '', '']);
   });
 });
