@@ -1,10 +1,10 @@
 <template>
-  <Teleport to="body">
+  <Teleport :to="attachTo" :disabled="disabled">
     <dialog
       id="modal"
       :open="show"
       ref="trapRef"
-      class="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+      class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
       @keydown.esc.exact="closeModal"
       @click.self="closeModal"
     >
@@ -71,11 +71,18 @@ import type { CalendarEvent } from '@/types';
 import useFocusTrap from '@/composables/useFocusTrap';
 import Button from '@/components/molecules/Button';
 
-const { show, date, hour } = defineProps<{
-  show: boolean;
-  date?: string;
-  hour?: string;
-}>();
+const { show, date, hour } = withDefaults(
+  defineProps<{
+    show: boolean;
+    disabled?: boolean;
+    attachTo?: string;
+    date?: string;
+    hour?: string;
+  }>(),
+  {
+    attachTo: 'body',
+  }
+);
 
 const emit = defineEmits<{
   (e: 'close', show: boolean): void;
