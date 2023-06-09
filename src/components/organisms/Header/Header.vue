@@ -51,5 +51,6 @@ function moveBackwards() {
 
 function handleModal() {
   showModal.value = !showModal.value;
+  console.log(store.events);
 }
 </script>
