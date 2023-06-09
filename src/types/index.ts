@@ -1,4 +1,5 @@
 export interface DayEvent {
+  id: string;
   eventName: string;
   eventHour: string;
 }

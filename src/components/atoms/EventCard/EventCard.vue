@@ -1,21 +1,62 @@
 <template>
   <div
-    class="event-card grid-position flex h-10 w-11/12 items-center justify-center rounded-md border-2 border-l-[6px] border-slate-100 text-sm text-white shadow-md"
+    class="event-card grid-position flex h-10 w-11/12 items-center justify-start gap-2 rounded-md border-2 border-l-[6px] border-slate-100 p-1 text-sm text-white shadow-md"
+    @click="fillEvent"
   >
-    {{ eventTitle }}
+    <p>
+      {{ eventHour }}
+    </p>
+    <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+      {{ eventTitle }}
+    </p>
+    <EventModal
+      v-if="show"
+      :show="show"
+      :id="eventId"
+      :title="modalTitle"
+      :date="modalDate"
+      :hour="modalHour"
+      @close="show = false"
+      edit
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-const { hour } = defineProps<{
+import { ref } from 'vue';
+import { useCalendarStore } from '@/stores/calendarStore';
+import EventModal from '@/components/atoms/EventModal';
+
+const show = ref(false);
+
+const { eventDate, eventId, eventTitle, eventHour } = defineProps<{
+  eventDate: string;
+  eventId: string;
   eventTitle: string;
-  hour: string;
+  eventHour: string;
 }>();
+
+const store = useCalendarStore();
+const modalTitle = ref('');
+const modalDate = ref('');
+const modalHour = ref('');
+
+function fillEvent() {
+  const targetEvent = store.events
+    .find((event) => event.date === eventDate)
+    ?.events?.find((event) => (event.id = eventId));
+
+  modalDate.value = eventDate;
+  modalTitle.value = targetEvent!.eventName;
+  modalHour.value = targetEvent!.eventHour;
+
+  show.value = true;
+}
 </script>
 
 <style>
 .grid-position {
-  grid-row-start: v-bind('hour');
+  grid-row-start: v-bind('eventHour');
 }
 
 .event-card {

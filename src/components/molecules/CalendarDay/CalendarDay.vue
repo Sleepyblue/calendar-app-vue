@@ -16,8 +16,10 @@
       ></div>
       <EventCard
         v-for="event in events"
+        :eventDate="day"
+        :eventId="event.id"
         :eventTitle="event.eventName"
-        :hour="event.eventHour"
+        :eventHour="event.eventHour"
         class="pointer-events-auto absolute cursor-pointer"
       />
     </div>
