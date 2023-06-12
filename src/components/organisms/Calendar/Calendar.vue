@@ -19,10 +19,11 @@ import { computed } from 'vue';
 import CalendarDay from '@/components/molecules/CalendarDay';
 import CalendarHours from '@/components/atoms/CalendarHours';
 import { useCalendarStore } from '@/stores/calendarStore';
-import { convertToStringDates } from '@/utils/Dates';
+import { convertWeekDatesToStrings } from '@/utils/Dates';
 
 const store = useCalendarStore();
-const weekDates = computed(() => convertToStringDates(store.view, true));
+const weekDates = computed(() => convertWeekDatesToStrings(store.view));
+console.log(weekDates.value);
 </script>
 
 <style>

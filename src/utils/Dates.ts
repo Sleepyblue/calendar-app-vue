@@ -1,8 +1,8 @@
 /**
- * Outputs an array with dates, comprising the chosen interval, based on current date
+ * Outputs the current week dates in milliseconds, based on current date, by default. It allows to choose the number of week days outputed.
  */
-export function getCurrentDates(days: number = 7) {
-  let currentDates = [];
+export function getWeekDates(days: number = 7) {
+  let weekDates = [];
 
   for (let i = 0; i <= days - 1; i++) {
     const currentDate = new Date();
@@ -10,75 +10,68 @@ export function getCurrentDates(days: number = 7) {
     const day = currentDate.setDate(
       currentDate.getDate() + (days === 7 ? -currentDay + i + 1 : +i)
     );
-    currentDates.push(day);
+    weekDates.push(day);
   }
 
-  return currentDates;
+  return weekDates;
 }
 
 /**
- * Moves the current calendar view, back and forth, based on the passed interval
+ * Outputs the current week number, based on current date.
  */
-export function setCurrentDates(
-  datesArray: number[],
-  forward: boolean = false
-) {
-  const copyDatesArray: number[] = [];
-  const interval = datesArray.length * 24 * 60 * 60 * 1000;
-  datesArray.forEach((date) =>
-    copyDatesArray.push(date + (forward ? +interval : -interval))
+export function getWeekNumber(): number {
+  const currentDate = new Date();
+  const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
+  const diffInDays = Math.floor(
+    (currentDate.getTime() - firstDayOfYear.getTime()) / (1000 * 60 * 60 * 24)
   );
 
-  return copyDatesArray;
+  return Math.ceil((diffInDays + firstDayOfYear.getDay() + 1) / 7);
+}
+
+/**
+ * Moves the current calendar view forward based on the passed week dates
+ */
+
+export function moveWeekForward(weekDates: number[]) {
+  const nextWeekDates: number[] = [];
+  const interval = weekDates.length * 24 * 60 * 60 * 1000;
+  weekDates.forEach((date) => nextWeekDates.push(date + interval));
+
+  return nextWeekDates;
+}
+
+/**
+ * Moves the current calendar view back based on the passed week dates
+ */
+
+export function moveWeekBack(weekDates: number[]) {
+  const previousWeekDates: number[] = [];
+  const interval = weekDates.length * 24 * 60 * 60 * 1000;
+  weekDates.forEach((date) => previousWeekDates.push(date - interval));
+
+  return previousWeekDates;
 }
 
 /**
  * Converts an array with dates, in miliseconds, to an array with string dates
  */
-export function convertToStringDates(
-  datesArray: number[],
-  isoDate?: boolean,
-  shortHand?: boolean
-) {
-  const stringsWeekArray: string[] = [];
-  const options: {} = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  };
-
-  datesArray.forEach((date) => {
-    let dateLocale = new Date(date).toLocaleDateString('en-GB', options);
-    let dateISO = new Date(date).toISOString().slice(0, 10);
-
-    if (shortHand) {
-      stringsWeekArray.push(
-        dateLocale.slice(0, 3).toUpperCase() + ' ' + dateISO.slice(-2)
-      );
-      return;
-    } else if (isoDate) {
-      stringsWeekArray.push(dateISO);
-      return;
-    } else {
-      stringsWeekArray.push(dateLocale);
-      return;
-    }
+export function convertWeekDatesToStrings(datesArray: number[]) {
+  return datesArray.map((date) => {
+    const currentDate = new Date(date);
+    const isoDate = currentDate.toISOString();
+    const stringWeekDate = isoDate.slice(0, 10);
+    return stringWeekDate;
   });
-
-  return stringsWeekArray;
 }
 
-export function convertDateToShorthand(date: string) {
-  const options: {} = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  };
+/**
+ * Converts a string Date (YYYY-MM-DD) to a shorter string version of that passed date
+ */
+export function convertDateToShorthand(stringDate: string) {
+  const date = new Date(stringDate);
+  const day = date.toLocaleString('en', { weekday: 'short' }).toUpperCase();
+  const dayOfMonth = date.getDate();
 
-  let dateLocale = new Date(date).toLocaleDateString('en-GB', options);
-  let dateISO = new Date(date).toISOString().slice(0, 10);
-
-  return dateLocale.slice(0, 3).toUpperCase() + ' ' + dateISO.slice(-2);
+  return `${day} ${dayOfMonth}`;
 }

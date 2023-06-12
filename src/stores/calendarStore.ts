@@ -6,5 +6,13 @@ export const useCalendarStore = defineStore('calendar', () => {
   const view = ref();
   const events = ref<CalendarEvent[]>([]);
 
-  return { view, events };
+  function setView(dates: number[]) {
+    view.value = dates;
+  }
+
+  function updateView(dates: number[]) {
+    view.value = dates;
+  }
+
+  return { view, setView, updateView, events };
 });

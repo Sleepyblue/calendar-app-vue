@@ -27,11 +27,11 @@ import { ref, computed } from 'vue';
 import Button from '@/components/molecules/Button';
 import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
-import { getCurrentDates, setCurrentDates } from '@/utils/Dates';
+import { moveWeekBack, moveWeekForward } from '@/utils/Dates';
 
 const store = useCalendarStore();
+const updateView = store.updateView;
 const showModal = ref(false);
-store.view = getCurrentDates();
 
 // TODO: Rework this as an external snippet
 let month = computed(() => {
@@ -42,11 +42,11 @@ let month = computed(() => {
 });
 
 function moveForward() {
-  store.view = setCurrentDates(store.view, true);
+  updateView(moveWeekForward(store.view));
 }
 
 function moveBackwards() {
-  store.view = setCurrentDates(store.view, false);
+  updateView(moveWeekBack(store.view));
 }
 
 function handleModal() {

@@ -1,9 +1,12 @@
-<script setup lang="ts">
-import DefaultLayout from '@/views/pages/DefaultLayout/DefaultLayout.vue';
-</script>
-
 <template>
   <DefaultLayout />
 </template>
 
-<style></style>
+<script setup lang="ts">
+import DefaultLayout from '@/views/pages/DefaultLayout/DefaultLayout.vue';
+import { useCalendarStore } from './stores/calendarStore';
+import { getWeekDates } from './utils/Dates';
+
+const setView = useCalendarStore().setView;
+setView(getWeekDates());
+</script>

@@ -1,6 +1,6 @@
 <template>
   <div class="h-full" :data-day="day">
-    <CalendarHeader :shortDate="shortWeekDate" :dateTime="day" />
+    <CalendarHeader :shortDate="shortDayDate" :dateTime="day" />
     <div
       :id="day"
       class="calendar-day__grid relative h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-r"
@@ -48,7 +48,7 @@ const { day } = defineProps<{
 }>();
 
 const store = useCalendarStore();
-const shortWeekDate = computed(() => convertDateToShorthand(day));
+const shortDayDate = computed(() => convertDateToShorthand(day));
 const showModal = ref(false);
 const date = ref('');
 const hour = ref('');
