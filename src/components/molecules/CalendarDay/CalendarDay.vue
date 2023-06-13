@@ -9,7 +9,7 @@
       <!-- Convert to atom -->
       <div
         v-for="(t, index) in 24"
-        :data-hour="t"
+        :data-hour="t - 1"
         class="hour__grid-area relative flex border-b"
         :class="{ 'border-b-0': index === 23 }"
         @click="handleModal"
@@ -18,8 +18,8 @@
         v-for="event in events"
         :eventDate="day"
         :eventId="event.id"
-        :eventTitle="event.eventName"
-        :eventHour="event.eventHour"
+        :eventTitle="event.title"
+        :eventHour="event.hour"
         class="pointer-events-auto absolute cursor-pointer"
       />
     </div>
@@ -40,7 +40,6 @@ import EventCard from '@/components/atoms/EventCard';
 import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertDateToShorthand } from '@/utils/Dates';
-import type { DayEvent } from '@/types';
 
 const { day } = defineProps<{
   day: string;
@@ -51,7 +50,7 @@ const store = useCalendarStore();
 const shortDayDate = computed(() => convertDateToShorthand(day));
 const showModal = ref(false);
 const date = ref('');
-const hour = ref('');
+const hour = ref(0);
 
 function handleModal(e: MouseEvent) {
   showModal.value = !showModal.value;
@@ -60,19 +59,14 @@ function handleModal(e: MouseEvent) {
     date.value = day;
     if (!date) return;
 
-    hour.value = (e.target as HTMLElement).dataset.hour!;
+    hour.value = +(e.target as HTMLElement).dataset.hour!;
     if (!hour.value) return;
   }
 }
 
-const events = computed(() => {
-  let events: DayEvent[] = [];
-  store.events.forEach((item) => {
-    if (day === item.date) item.events?.forEach((event) => events.push(event));
-  });
-
-  return events;
-});
+const events = computed(() =>
+  store.weekEvents?.events.filter((event) => event.date === day)
+);
 </script>
 
 <style>

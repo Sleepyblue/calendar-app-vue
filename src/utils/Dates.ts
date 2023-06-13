@@ -17,13 +17,17 @@ export function getWeekDates(days: number = 7) {
 }
 
 /**
- * Outputs the current week number, based on current date.
+ * Outputs the current week number, based on the first element from the `getWeekDates` array.
  */
-export function getWeekNumber(): number {
-  const currentDate = new Date();
-  const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
+
+export function getWeekNumber(weekDates: Date[]): number {
+  if (weekDates.length === 0) return 0;
+
+  const firstDate = new Date(weekDates[0]);
+
+  const firstDayOfYear = new Date(firstDate.getFullYear(), 0, 1);
   const diffInDays = Math.floor(
-    (currentDate.getTime() - firstDayOfYear.getTime()) / (1000 * 60 * 60 * 24)
+    (firstDate.getTime() - firstDayOfYear.getTime()) / (1000 * 60 * 60 * 24)
   );
 
   return Math.ceil((diffInDays + firstDayOfYear.getDay() + 1) / 7);

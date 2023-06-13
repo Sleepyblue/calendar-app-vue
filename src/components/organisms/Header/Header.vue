@@ -30,27 +30,26 @@ import { useCalendarStore } from '@/stores/calendarStore';
 import { moveWeekBack, moveWeekForward } from '@/utils/Dates';
 
 const store = useCalendarStore();
-const updateView = store.updateView;
+const updateView = store.updateWeekDates;
 const showModal = ref(false);
 
 // TODO: Rework this as an external snippet
 let month = computed(() => {
-  const getWeekStart = new Date(store.view[0]).toDateString();
+  const getWeekStart = new Date(store.weekDates[0]).toDateString();
   let shortMonth = getWeekStart.slice(4, 7);
   let year = getWeekStart.slice(-4);
   return `${shortMonth}' ${year}`;
 });
 
 function moveForward() {
-  updateView(moveWeekForward(store.view));
+  updateView(moveWeekForward(store.weekDates));
 }
 
 function moveBackwards() {
-  updateView(moveWeekBack(store.view));
+  updateView(moveWeekBack(store.weekDates));
 }
 
 function handleModal() {
   showModal.value = !showModal.value;
-  console.log(store.events);
 }
 </script>
