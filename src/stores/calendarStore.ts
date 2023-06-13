@@ -1,6 +1,6 @@
-import { ref, computed } from 'vue';
+import { ref, computed, toRaw, markRaw } from 'vue';
 import { defineStore } from 'pinia';
-import type { CalendarEvents } from '@/types';
+import type { CalendarEvents, DayEvent } from '@/types';
 import { getWeekNumber } from '@/utils/Dates';
 import UniqueIdentifier from '@/utils/UniqueIdentifier';
 
@@ -24,8 +24,10 @@ export const useCalendarStore = defineStore('calendar', () => {
   }
 
   function addEvent(title: string, date: string, hour: number) {
-    if (weekEvents.value) {
-      weekEvents.value.events?.push({
+    const weekMatches = weekNumber.value === getWeekNumber([new Date(date)]);
+
+    if (weekMatches && weekEvents.value) {
+      weekEvents.value?.events?.push({
         id: UniqueIdentifier(),
         date: date,
         title: title,
@@ -33,7 +35,7 @@ export const useCalendarStore = defineStore('calendar', () => {
       });
     } else {
       calendarEvents.value.push({
-        weekNumber: weekNumber.value,
+        weekNumber: getWeekNumber([new Date(date)]),
         events: [
           {
             id: UniqueIdentifier(),
@@ -48,11 +50,36 @@ export const useCalendarStore = defineStore('calendar', () => {
 
   function updateEvent(id: string, title: string, date: string, hour: number) {
     let targetEvent = weekEvents.value?.events.find((event) => event.id === id);
+    const initialDate = targetEvent?.date;
 
     if (!targetEvent) return;
+    targetEvent.hour = hour;
     targetEvent.title = title;
     targetEvent.date = date;
-    targetEvent.hour = hour;
+
+    if (initialDate !== date) {
+      const movedEvent = weekEvents.value?.events.splice(
+        weekEvents.value?.events.indexOf(targetEvent),
+        1
+      );
+      const unproxy = toRaw(movedEvent![0]);
+
+      moveEvent(unproxy);
+    }
+  }
+
+  function moveEvent(event: DayEvent) {
+    const checkWeekNumber = getWeekNumber([new Date(event.date)]);
+    const checkWeekExists = calendarEvents.value.find(
+      (week) => week.weekNumber === checkWeekNumber
+    );
+
+    if (checkWeekExists) checkWeekExists.events.push(event);
+    else
+      calendarEvents.value.push({
+        weekNumber: checkWeekNumber,
+        events: [event],
+      });
   }
 
   return {
