@@ -5,12 +5,12 @@
     <time :datetime="dateTime" class="text-center text-black">
       {{ shortDate }}
     </time>
-    <EventHeader
+    <!-- <EventHeader
       v-for="(event, index) in eventHeaders"
       :key="index"
       :eventTitle="event.eventName + index"
       class="header-event"
-    />
+    /> -->
   </header>
 </template>
 
@@ -25,9 +25,9 @@ const { dateTime } = defineProps<{
 }>();
 
 const store = useCalendarStore();
-const eventHeaders = computed(
-  () => store.events.find((event) => event.date === dateTime)?.events
-);
+// const eventHeaders = computed(
+//   () => store.events.find((event) => event.date === dateTime)?.events
+// );
 </script>
 
 <style>

@@ -33,22 +33,22 @@ const { eventDate, eventId, eventTitle, eventHour } = defineProps<{
   eventDate: string;
   eventId: string;
   eventTitle: string;
-  eventHour: string;
+  eventHour: number;
 }>();
 
 const store = useCalendarStore();
 const modalTitle = ref('');
 const modalDate = ref('');
-const modalHour = ref('');
+const modalHour = ref(0);
 
 function fillEvent() {
-  const targetEvent = store.events
-    .find((event) => event.date === eventDate)
-    ?.events?.find((event) => (event.id = eventId));
+  const targetEvent = store.weekEvents?.events.find(
+    (event) => event.id === eventId
+  );
 
   modalDate.value = eventDate;
-  modalTitle.value = targetEvent!.eventName;
-  modalHour.value = targetEvent!.eventHour;
+  modalTitle.value = targetEvent!.title;
+  modalHour.value = +targetEvent!.hour;
 
   show.value = true;
 }
@@ -56,7 +56,7 @@ function fillEvent() {
 
 <style>
 .grid-position {
-  grid-row-start: v-bind('eventHour');
+  grid-row-start: v-bind('eventHour + 1');
 }
 
 .event-card {

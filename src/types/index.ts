@@ -2,12 +2,10 @@ export interface DayEvent {
   id: string;
   date: string;
   title: string;
-  hour: string;
+  hour: number;
 }
 
-export interface CalendarEvent {
-  week?: {
-    number: number;
-    events: DayEvent[];
-  };
+export interface CalendarEvents {
+  weekNumber: number;
+  events: DayEvent[];
 }
