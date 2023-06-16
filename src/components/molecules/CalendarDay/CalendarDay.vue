@@ -11,9 +11,18 @@
         v-for="(t, index) in 24"
         :data-hour="t - 1"
         class="hour__grid-area relative flex border-b"
-        :class="{ 'border-b-0': index === 23 }"
+        :class="{ 'border-b-0': index === 23, 'cursor-move': isMouseDown }"
         @click="handleModal"
-      ></div>
+        @mousedown.prevent="handleMouseDown"
+        @mousemove="handleMouseMove"
+        @mouseup="handleMouseUp"
+      />
+      <PreviewCard
+        v-if="isDragging && isMouseDown"
+        :changeOffset="changeOffset"
+        :position="position"
+        :height="height"
+      />
       <EventCard
         v-for="event in events"
         :eventDate="day"
@@ -37,6 +46,7 @@
 import { computed, ref } from 'vue';
 import CalendarHeader from '@/components/molecules/CalendarHeader';
 import EventCard from '@/components/atoms/EventCard';
+import PreviewCard from '@/components/atoms/PreviewCard';
 import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertDateToShorthand } from '@/utils/Dates';
@@ -51,6 +61,53 @@ const shortDayDate = computed(() => convertDateToShorthand(day));
 const showModal = ref(false);
 const date = ref('');
 const hour = ref(0);
+
+// const rowStart = ref();
+// const rowEnd = ref();
+const isMouseDown = ref(false);
+const isDragging = ref(false);
+const position = ref();
+const height = ref();
+const changeOffset = ref(false);
+const currentOffset = ref();
+let initialPosition = 0;
+
+function handleMouseDown(e: MouseEvent) {
+  const target = e.target as HTMLElement;
+  isMouseDown.value = true;
+  position.value = target.offsetTop;
+  initialPosition = position.value;
+}
+
+function handleMouseMove(e: MouseEvent) {
+  const target = e.target as HTMLElement;
+  if (!isMouseDown.value) return;
+  isDragging.value = true;
+
+  currentOffset.value = target.offsetTop;
+  const offsetDiff = currentOffset.value - initialPosition;
+
+  if (offsetDiff >= 0) {
+    changeOffset.value = false;
+    position.value = initialPosition;
+    height.value = offsetDiff + 50;
+  } else {
+    changeOffset.value = true;
+    height.value = Math.abs(offsetDiff);
+
+    if (offsetDiff === -50) {
+      const containerHeight = (target.offsetParent! as HTMLElement)
+        .offsetHeight;
+      position.value = containerHeight - target.offsetTop - target.offsetHeight;
+    }
+  }
+}
+
+function handleMouseUp(e: MouseEvent) {
+  isMouseDown.value = false;
+  isDragging.value = false;
+  changeOffset.value = false;
+}
 
 function handleModal(e: MouseEvent) {
   showModal.value = !showModal.value;

@@ -1,4 +1,4 @@
-import { ref, computed, toRaw, markRaw } from 'vue';
+import { ref, computed, toRaw } from 'vue';
 import { defineStore } from 'pinia';
 import type { CalendarEvents, DayEvent } from '@/types';
 import { getWeekNumber } from '@/utils/Dates';
@@ -27,7 +27,7 @@ export const useCalendarStore = defineStore('calendar', () => {
     const weekMatches = weekNumber.value === getWeekNumber([new Date(date)]);
 
     if (weekMatches && weekEvents.value) {
-      weekEvents.value?.events?.push({
+      weekEvents.value.events.push({
         id: UniqueIdentifier(),
         date: date,
         title: title,
@@ -49,7 +49,9 @@ export const useCalendarStore = defineStore('calendar', () => {
   }
 
   function updateEvent(id: string, title: string, date: string, hour: number) {
-    let targetEvent = weekEvents.value?.events.find((event) => event.id === id);
+    const targetEvent = weekEvents.value?.events.find(
+      (event) => event.id === id
+    );
     const initialDate = targetEvent?.date;
 
     if (!targetEvent) return;
@@ -82,6 +84,19 @@ export const useCalendarStore = defineStore('calendar', () => {
       });
   }
 
+  function deleteEvent(uuid: string) {
+    const targetEvent = weekEvents.value?.events.find(
+      (event) => event.id === uuid
+    );
+
+    const deletedEvent = weekEvents.value?.events.splice(
+      weekEvents.value?.events.indexOf(targetEvent!),
+      1
+    );
+
+    return deletedEvent;
+  }
+
   return {
     weekDates,
     weekNumber,
@@ -91,5 +106,6 @@ export const useCalendarStore = defineStore('calendar', () => {
     updateWeekDates,
     addEvent,
     updateEvent,
+    deleteEvent,
   };
 });
