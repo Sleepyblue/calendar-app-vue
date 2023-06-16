@@ -23,14 +23,26 @@ export function getWeekDates(days: number = 7) {
 export function getWeekNumber(weekDates: Date[]): number {
   if (weekDates.length === 0) return 0;
 
+  if (weekDates.length === 0) return 0;
+
   const firstDate = new Date(weekDates[0]);
+  const lastDate = new Date(weekDates[weekDates.length - 1]);
 
   const firstDayOfYear = new Date(firstDate.getFullYear(), 0, 1);
   const diffInDays = Math.floor(
     (firstDate.getTime() - firstDayOfYear.getTime()) / (1000 * 60 * 60 * 24)
   );
 
-  return Math.ceil((diffInDays + firstDayOfYear.getDay() + 1) / 7);
+  const firstDayOfWeek = (firstDayOfYear.getDay() + 6) % 7; // Adjust Sunday to be the last day of the week
+
+  const weekNumber = Math.ceil((diffInDays - firstDayOfWeek + 1) / 7);
+
+  // Adjust the week number if the last date falls on Sunday
+  if (lastDate.getDay() === 0) {
+    return weekNumber - 1;
+  }
+
+  return weekNumber;
 }
 
 /**

@@ -2,7 +2,8 @@ export interface DayEvent {
   id: string;
   date: string;
   title: string;
-  hour: number;
+  startHour: number;
+  endHour: number;
 }
 
 export interface CalendarEvents {

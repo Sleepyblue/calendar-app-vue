@@ -22,13 +22,24 @@
         required
       />
       <input
-        ref="hourInput"
+        ref="startHourInput"
         type="number"
         min="1"
         max="24"
         placeholder="Insert an hour (1 - 24)"
         class="bg-slate-100 p-1"
-        v-model="eventHour"
+        v-model="eventStartHour"
+        :onChange="onChange"
+        required
+      />
+      <input
+        ref="endHourInput"
+        type="number"
+        :min="eventStartHour"
+        max="24"
+        :placeholder="`Insert an hour (${eventStartHour} - 24)`"
+        class="bg-slate-100 p-1"
+        v-model="eventEndHour"
         required
       />
     </form>
@@ -66,13 +77,14 @@ import ModalTemplate from '@/components/templates/ModalTemplate/ModalTemplate.vu
 import Button from '@/components/molecules/Button';
 import { useCalendarStore } from '@/stores/calendarStore';
 
-const { id, title, date, hour } = defineProps<{
+const { id, title, date, startHour, endHour } = defineProps<{
   show: boolean;
   edit?: boolean;
   id?: string;
   title?: string;
   date?: string;
-  hour?: number;
+  startHour?: number;
+  endHour?: number;
 }>();
 
 const emit = defineEmits<{
@@ -83,17 +95,28 @@ const store = useCalendarStore();
 const deleteEvent = store.deleteEvent;
 const titleInput = ref<HTMLInputElement | null>(null);
 const dateInput = ref<HTMLInputElement | null>(null);
-const hourInput = ref<HTMLInputElement | null>(null);
+const startHourInput = ref<HTMLInputElement | null>(null);
+const endHourInput = ref<HTMLInputElement | null>(null);
 const formValidation = ref<HTMLFormElement | null>(null);
 
 const error = ref('');
 const eventTitle = ref(title || '');
 const eventDate = ref(date || '');
-const eventHour = ref(hour || 0);
+const eventStartHour = ref(startHour || 0);
+const eventEndHour = ref(endHour || 0);
+
+function onChange() {
+  eventEndHour.value = eventStartHour.value;
+}
 
 function addEvent() {
   if (formValidation.value?.checkValidity()) {
-    store.addEvent(eventTitle.value, eventDate.value, eventHour.value);
+    store.addEvent(
+      eventTitle.value,
+      eventDate.value,
+      eventStartHour.value,
+      eventEndHour.value
+    );
 
     emit('close', true);
   } else if (!titleInput.value?.checkValidity()) {
@@ -102,14 +125,23 @@ function addEvent() {
   } else if (!dateInput.value?.checkValidity()) {
     error.value = `Please add the event's date`;
     return;
-  } else if (!hourInput.value?.checkValidity()) {
+  } else if (!startHourInput.value?.checkValidity()) {
     error.value = `Please add an hour between 1 and 24`;
+    return;
+  } else if (!endHourInput.value?.checkValidity()) {
+    error.value = `Please add an hour between ${eventStartHour.value} and 24`;
   }
 }
 
 function editEvent(id: string) {
   if (formValidation.value?.checkValidity()) {
-    store.updateEvent(id, eventTitle.value, eventDate.value, eventHour.value);
+    store.updateEvent(
+      id,
+      eventTitle.value,
+      eventDate.value,
+      eventStartHour.value,
+      eventEndHour.value
+    );
 
     emit('close', true);
   } else if (!titleInput.value?.checkValidity()) {
@@ -118,8 +150,11 @@ function editEvent(id: string) {
   } else if (!dateInput.value?.checkValidity()) {
     error.value = `Please add the event's date`;
     return;
-  } else if (!hourInput.value?.checkValidity()) {
+  } else if (!startHourInput.value?.checkValidity()) {
     error.value = `Please add an hour between 1 and 24`;
+    return;
+  } else if (!endHourInput.value?.checkValidity()) {
+    error.value = `Please add an hour between ${eventStartHour.value} and 24`;
   }
 }
 </script>

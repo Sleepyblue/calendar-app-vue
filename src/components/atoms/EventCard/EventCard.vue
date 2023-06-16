@@ -1,10 +1,11 @@
 <template>
   <div
-    class="event-card grid-position flex h-10 w-11/12 items-center justify-start gap-2 rounded-md border-2 border-l-[6px] border-slate-100 p-1 text-sm text-white shadow-md"
+    class="event-card grid-start flex h-full w-11/12 items-start justify-start gap-2 rounded-md border-2 border-l-[6px] border-slate-100 p-1 text-sm text-white shadow-md"
+    :class="{ 'grid-end': eventEndHour }"
     @click="fillEvent"
   >
     <p>
-      {{ eventHour }}
+      {{ eventStartHour }}
     </p>
     <p class="overflow-hidden text-ellipsis whitespace-nowrap">
       {{ eventTitle }}
@@ -15,7 +16,8 @@
       :id="eventId"
       :title="modalTitle"
       :date="modalDate"
-      :hour="modalHour"
+      :startHour="modalStartHour"
+      :endHour="modalEndHour"
       @close="show = false"
       edit
     />
@@ -29,17 +31,20 @@ import EventModal from '@/components/atoms/EventModal';
 
 const show = ref(false);
 
-const { eventDate, eventId, eventTitle, eventHour } = defineProps<{
-  eventDate: string;
-  eventId: string;
-  eventTitle: string;
-  eventHour: number;
-}>();
+const { eventDate, eventId, eventTitle, eventStartHour, eventEndHour } =
+  defineProps<{
+    eventDate: string;
+    eventId: string;
+    eventTitle: string;
+    eventStartHour: number;
+    eventEndHour: number;
+  }>();
 
 const store = useCalendarStore();
 const modalTitle = ref('');
 const modalDate = ref('');
-const modalHour = ref(0);
+const modalStartHour = ref(0);
+const modalEndHour = ref(0);
 
 function fillEvent() {
   const targetEvent = store.weekEvents?.events.find(
@@ -48,15 +53,20 @@ function fillEvent() {
 
   modalDate.value = eventDate;
   modalTitle.value = targetEvent!.title;
-  modalHour.value = +targetEvent!.hour;
+  modalStartHour.value = +targetEvent!.startHour;
+  modalEndHour.value = +targetEvent!.endHour;
 
   show.value = true;
 }
 </script>
 
 <style>
-.grid-position {
-  grid-row-start: v-bind('eventHour + 1');
+.grid-start {
+  grid-row-start: v-bind('eventStartHour + 1');
+}
+
+.grid-end {
+  grid-row-end: v-bind('eventEndHour + 1');
 }
 
 .event-card {

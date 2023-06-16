@@ -6,7 +6,7 @@ import UniqueIdentifier from '@/utils/UniqueIdentifier';
 
 export const useCalendarStore = defineStore('calendar', () => {
   const weekDates = ref();
-  const weekNumber = computed(() => getWeekNumber(weekDates.value));
+  const weekNumber = computed(() => getWeekNumber([weekDates.value[0]]));
   const calendarEvents = ref<CalendarEvents[]>([]);
   const weekEvents = computed(() => {
     const findWeek = calendarEvents.value.find(
@@ -23,7 +23,12 @@ export const useCalendarStore = defineStore('calendar', () => {
     weekDates.value = dates;
   }
 
-  function addEvent(title: string, date: string, hour: number) {
+  function addEvent(
+    title: string,
+    date: string,
+    startHour: number,
+    endHour: number
+  ) {
     const weekMatches = weekNumber.value === getWeekNumber([new Date(date)]);
 
     if (weekMatches && weekEvents.value) {
@@ -31,7 +36,8 @@ export const useCalendarStore = defineStore('calendar', () => {
         id: UniqueIdentifier(),
         date: date,
         title: title,
-        hour: hour,
+        startHour: startHour,
+        endHour: endHour,
       });
     } else {
       calendarEvents.value.push({
@@ -41,21 +47,29 @@ export const useCalendarStore = defineStore('calendar', () => {
             id: UniqueIdentifier(),
             date: date,
             title: title,
-            hour: hour,
+            startHour: startHour,
+            endHour: endHour,
           },
         ],
       });
     }
   }
 
-  function updateEvent(id: string, title: string, date: string, hour: number) {
+  function updateEvent(
+    id: string,
+    title: string,
+    date: string,
+    startHour: number,
+    endHour: number
+  ) {
     const targetEvent = weekEvents.value?.events.find(
       (event) => event.id === id
     );
     const initialDate = targetEvent?.date;
 
     if (!targetEvent) return;
-    targetEvent.hour = hour;
+    targetEvent.startHour = startHour;
+    targetEvent.endHour = endHour;
     targetEvent.title = title;
     targetEvent.date = date;
 
