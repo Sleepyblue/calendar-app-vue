@@ -35,6 +35,13 @@
     <template #action>
       <Button
         v-if="edit"
+        class="rounded-lg bg-red-400 px-3 py-2 font-bold text-white active:translate-y-[1px]"
+        icon="Trash"
+        type="submit"
+        @click.prevent="deleteEvent(id as any)"
+      />
+      <Button
+        v-if="edit"
         class="rounded-lg bg-[#f5a278] px-6 py-2 font-bold text-white active:translate-y-[1px]"
         type="submit"
         @click.prevent="editEvent(id as any)"
@@ -56,10 +63,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ModalTemplate from '@/components/templates/ModalTemplate/ModalTemplate.vue';
-import { useCalendarStore } from '@/stores/calendarStore';
-import type { CalendarEvents } from '@/types';
 import Button from '@/components/molecules/Button';
-import UniqueIdentifier from '@/utils/UniqueIdentifier';
+import { useCalendarStore } from '@/stores/calendarStore';
 
 const { id, title, date, hour } = defineProps<{
   show: boolean;
@@ -75,6 +80,7 @@ const emit = defineEmits<{
 }>();
 
 const store = useCalendarStore();
+const deleteEvent = store.deleteEvent;
 const titleInput = ref<HTMLInputElement | null>(null);
 const dateInput = ref<HTMLInputElement | null>(null);
 const hourInput = ref<HTMLInputElement | null>(null);
