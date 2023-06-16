@@ -28,7 +28,8 @@
         :eventDate="day"
         :eventId="event.id"
         :eventTitle="event.title"
-        :eventHour="event.hour"
+        :eventStartHour="event.startHour"
+        :eventEndHour="event.endHour"
         class="pointer-events-auto absolute cursor-pointer"
       />
     </div>
@@ -36,7 +37,8 @@
       v-if="showModal"
       :show="showModal"
       :date="date"
-      :hour="hour"
+      :startHour="startHour"
+      :endHour="endHour"
       @close="showModal = false"
     />
   </div>
@@ -60,7 +62,8 @@ const store = useCalendarStore();
 const shortDayDate = computed(() => convertDateToShorthand(day));
 const showModal = ref(false);
 const date = ref('');
-const hour = ref(0);
+const startHour = ref(0);
+const endHour = ref(0);
 
 // const rowStart = ref();
 // const rowEnd = ref();
@@ -71,12 +74,29 @@ const height = ref();
 const changeOffset = ref(false);
 const currentOffset = ref();
 let initialPosition = 0;
+let offsetDiff = 0;
+
+function handleModal(e: MouseEvent) {
+  showModal.value = true;
+
+  if (showModal.value) {
+    date.value = day;
+    if (!date) return;
+
+    startHour.value = +(e.target as HTMLElement).dataset.hour!;
+    if (!startHour.value) return;
+
+    endHour.value = 0;
+    if (!endHour.value) return;
+  }
+}
 
 function handleMouseDown(e: MouseEvent) {
   const target = e.target as HTMLElement;
   isMouseDown.value = true;
   position.value = target.offsetTop;
   initialPosition = position.value;
+  startHour.value = +target.dataset.hour!;
 }
 
 function handleMouseMove(e: MouseEvent) {
@@ -85,7 +105,7 @@ function handleMouseMove(e: MouseEvent) {
   isDragging.value = true;
 
   currentOffset.value = target.offsetTop;
-  const offsetDiff = currentOffset.value - initialPosition;
+  offsetDiff = currentOffset.value - initialPosition;
 
   if (offsetDiff >= 0) {
     changeOffset.value = false;
@@ -104,21 +124,20 @@ function handleMouseMove(e: MouseEvent) {
 }
 
 function handleMouseUp(e: MouseEvent) {
+  const target = e.target as HTMLElement;
   isMouseDown.value = false;
   isDragging.value = false;
   changeOffset.value = false;
-}
 
-function handleModal(e: MouseEvent) {
-  showModal.value = !showModal.value;
-
-  if (showModal.value) {
-    date.value = day;
-    if (!date) return;
-
-    hour.value = +(e.target as HTMLElement).dataset.hour!;
-    if (!hour.value) return;
+  date.value = day;
+  if (offsetDiff >= 0) {
+    endHour.value = +target.dataset.hour!;
+  } else {
+    endHour.value = startHour.value;
+    startHour.value = +target.dataset.hour!;
   }
+
+  showModal.value = true;
 }
 
 const events = computed(() =>
