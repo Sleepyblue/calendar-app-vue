@@ -24,9 +24,9 @@
       <input
         ref="startHourInput"
         type="number"
-        min="1"
+        min="0"
         max="24"
-        placeholder="Insert an hour (1 - 24)"
+        placeholder="Insert a starting hour (0 - 23)"
         class="bg-slate-100 p-1"
         v-model="eventStartHour"
         :onChange="onChange"
@@ -37,7 +37,7 @@
         type="number"
         :min="eventStartHour"
         max="24"
-        :placeholder="`Insert an hour (${eventStartHour} - 24)`"
+        :placeholder="`Insert an ending hour (${eventStartHour ?? 0} - 23)`"
         class="bg-slate-100 p-1"
         v-model="eventEndHour"
         required
@@ -102,11 +102,12 @@ const formValidation = ref<HTMLFormElement | null>(null);
 const error = ref('');
 const eventTitle = ref(title || '');
 const eventDate = ref(date || '');
-const eventStartHour = ref(startHour || 0);
-const eventEndHour = ref(endHour || 0);
+const eventStartHour = ref(startHour);
+const eventEndHour = ref(endHour);
 
 function onChange() {
-  eventEndHour.value = eventStartHour.value;
+  if (eventEndHour.value! < eventStartHour.value!)
+    eventEndHour.value = eventStartHour.value;
 }
 
 function addEvent() {
@@ -114,8 +115,8 @@ function addEvent() {
     store.addEvent(
       eventTitle.value,
       eventDate.value,
-      eventStartHour.value,
-      eventEndHour.value
+      eventStartHour.value!,
+      eventEndHour.value!
     );
 
     emit('close', true);
@@ -126,7 +127,7 @@ function addEvent() {
     error.value = `Please add the event's date`;
     return;
   } else if (!startHourInput.value?.checkValidity()) {
-    error.value = `Please add an hour between 1 and 24`;
+    error.value = `Please add an hour between 0 and 24`;
     return;
   } else if (!endHourInput.value?.checkValidity()) {
     error.value = `Please add an hour between ${eventStartHour.value} and 24`;
@@ -139,8 +140,8 @@ function editEvent(id: string) {
       id,
       eventTitle.value,
       eventDate.value,
-      eventStartHour.value,
-      eventEndHour.value
+      eventStartHour.value!,
+      eventEndHour.value!
     );
 
     emit('close', true);

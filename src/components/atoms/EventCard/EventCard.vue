@@ -1,63 +1,54 @@
 <template>
-  <div
-    class="event-card grid-start flex h-full w-11/12 items-start justify-start gap-2 rounded-md border-2 border-l-[6px] border-slate-100 p-1 text-sm text-white shadow-md"
+  <article
+    class="event-card grid-start flex h-full w-11/12 flex-col items-start justify-start gap-1 overflow-hidden rounded-md border-2 border-l-[6px] border-slate-100 p-1 text-white shadow-md"
     :class="{ 'grid-end': eventEndHour }"
-    @click="fillEvent"
+    @click="show = true"
   >
-    <p>
-      {{ eventStartHour }}
-    </p>
-    <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+    <p
+      class="w-full shrink-0 truncate whitespace-normal text-xs font-bold"
+      :class="isShort ? 'whitespace-nowrap' : 'line-clamp-2'"
+    >
       {{ eventTitle }}
+    </p>
+    <p class="text-xs font-light">
+      {{ hourRange }}
     </p>
     <EventModal
       v-if="show"
       :show="show"
       :id="eventId"
-      :title="modalTitle"
-      :date="modalDate"
-      :startHour="modalStartHour"
-      :endHour="modalEndHour"
+      :title="eventTitle"
+      :date="eventDate"
+      :startHour="eventStartHour"
+      :endHour="eventEndHour"
       @close="show = false"
       edit
     />
-  </div>
+  </article>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { useCalendarStore } from '@/stores/calendarStore';
+import { ref, watch, computed } from 'vue';
+import { formatHoursRange } from '@/utils/Hours';
 import EventModal from '@/components/atoms/EventModal';
+
+const props = defineProps<{
+  eventDate: string;
+  eventId: string;
+  eventTitle: string;
+  eventStartHour: number;
+  eventEndHour: number;
+}>();
 
 const show = ref(false);
 
-const { eventDate, eventId, eventTitle, eventStartHour, eventEndHour } =
-  defineProps<{
-    eventDate: string;
-    eventId: string;
-    eventTitle: string;
-    eventStartHour: number;
-    eventEndHour: number;
-  }>();
+const hourRange = computed(() =>
+  formatHoursRange(props.eventStartHour, props.eventEndHour, true)
+);
 
-const store = useCalendarStore();
-const modalTitle = ref('');
-const modalDate = ref('');
-const modalStartHour = ref(0);
-const modalEndHour = ref(0);
-
-function fillEvent() {
-  const targetEvent = store.weekEvents?.events.find(
-    (event) => event.id === eventId
-  );
-
-  modalDate.value = eventDate;
-  modalTitle.value = targetEvent!.title;
-  modalStartHour.value = +targetEvent!.startHour;
-  modalEndHour.value = +targetEvent!.endHour;
-
-  show.value = true;
-}
+const isShort = computed(() =>
+  props.eventEndHour - props.eventStartHour < 2 ? true : false
+);
 </script>
 
 <style>

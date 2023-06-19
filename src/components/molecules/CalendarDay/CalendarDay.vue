@@ -14,8 +14,8 @@
         :class="{ 'border-b-0': index === 23, 'cursor-move': isMouseDown }"
         @click="handleModal"
         @mousedown.prevent="handleMouseDown"
-        @mousemove="handleMouseMove"
-        @mouseup="handleMouseUp"
+        @mousemove.self="handleMouseMove"
+        @mouseup.stop="handleMouseUp"
       />
       <PreviewCard
         v-if="isDragging && isMouseDown"
@@ -65,8 +65,6 @@ const date = ref('');
 const startHour = ref(0);
 const endHour = ref(0);
 
-// const rowStart = ref();
-// const rowEnd = ref();
 const isMouseDown = ref(false);
 const isDragging = ref(false);
 const position = ref();
@@ -103,6 +101,12 @@ function handleMouseMove(e: MouseEvent) {
   const target = e.target as HTMLElement;
   if (!isMouseDown.value) return;
   isDragging.value = true;
+
+  // if (e.offsetX < 0 || e.offsetX > 131) {
+  //   isMouseDown.value = false;
+  //   isDragging.value = false;
+  //   return;
+  // }
 
   currentOffset.value = target.offsetTop;
   offsetDiff = currentOffset.value - initialPosition;
