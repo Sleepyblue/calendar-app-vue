@@ -7,7 +7,12 @@ export function formatHoursRange(
 
   const formattedStart = formatHour(startHour);
   const formattedEnd = formatHour(endHour);
-  return `${formattedStart} - ${formattedEnd}`;
+  const formatFinal =
+    formattedStart === formattedEnd
+      ? formattedStart
+      : `${formattedStart} - ${formattedEnd}`;
+
+  return formatFinal;
 }
 
 function formatHour12(hour: number): string {
@@ -23,7 +28,7 @@ function formatHour12(hour: number): string {
     minutes.replace('00', `${formattedMinutes}`);
   }
 
-  return `${formattedHour}:${minutes} ${isAM ? 'am' : 'pm'}`;
+  return `${formattedHour}:${minutes} ${isAM ? 'AM' : 'PM'}`;
 }
 
 function formatHour24(hour: number): string {

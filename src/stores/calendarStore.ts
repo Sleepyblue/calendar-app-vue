@@ -53,8 +53,6 @@ export const useCalendarStore = defineStore('calendar', () => {
         ],
       });
     }
-
-    console.log(calendarEvents.value);
   }
 
   function updateEvent(

@@ -1,6 +1,6 @@
 <template>
   <article
-    class="event-card grid-start flex h-full w-11/12 flex-col items-start justify-start gap-1 overflow-hidden rounded-md border-2 border-l-[6px] border-slate-100 p-1 text-white shadow-md"
+    class="event-card grid-start flex w-11/12 flex-col items-start justify-start gap-1 overflow-hidden rounded-md px-2 py-1 text-white"
     :class="{ 'grid-end': eventEndHour }"
     @click="show = true"
   >
@@ -61,6 +61,8 @@ const isShort = computed(() =>
 }
 
 .event-card {
+  height: calc(100% - 2px);
   background-color: #f5a278;
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
 }
 </style>
