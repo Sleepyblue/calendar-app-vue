@@ -2,11 +2,11 @@
   <div
     class="preview-card pc-position pointer-events-none shadow-md"
     :class="!changeOffset ? 'pc-top' : 'pc-bottom'"
-  ></div>
+  />
 </template>
 
 <script setup lang="ts">
-const { position, height, changeOffset } = defineProps<{
+defineProps<{
   changeOffset: boolean;
   position: number;
   height: number;
@@ -30,7 +30,6 @@ const { position, height, changeOffset } = defineProps<{
 
 .preview-card {
   background-color: rgba(245, 162, 120, 0.15);
-  /* border: 1px solid black; */
   border-radius: 12px;
 }
 </style>

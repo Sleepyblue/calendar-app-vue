@@ -22,7 +22,7 @@ import { useCalendarStore } from '@/stores/calendarStore';
 import { convertWeekDatesToStrings } from '@/utils/Dates';
 
 const store = useCalendarStore();
-const weekDates = computed(() => convertWeekDatesToStrings(store.weekDates));
+const weekDates = computed(() => convertWeekDatesToStrings(store.weekDates!));
 </script>
 
 <style>

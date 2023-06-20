@@ -35,18 +35,18 @@ const showModal = ref(false);
 
 // TODO: Rework this as an external snippet
 let month = computed(() => {
-  const getWeekStart = new Date(store.weekDates[0]).toDateString();
+  const getWeekStart = new Date(store.weekDates![0]).toDateString();
   let shortMonth = getWeekStart.slice(4, 7);
   let year = getWeekStart.slice(-4);
   return `${shortMonth}' ${year}`;
 });
 
 function moveForward() {
-  updateView(moveWeekForward(store.weekDates));
+  updateView(moveWeekForward(store.weekDates!));
 }
 
 function moveBackwards() {
-  updateView(moveWeekBack(store.weekDates));
+  updateView(moveWeekBack(store.weekDates!));
 }
 
 function handleModal() {

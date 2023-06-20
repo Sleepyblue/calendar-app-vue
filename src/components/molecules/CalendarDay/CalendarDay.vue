@@ -102,12 +102,6 @@ function handleMouseMove(e: MouseEvent) {
   if (!isMouseDown.value) return;
   isDragging.value = true;
 
-  // if (e.offsetX < 0 || e.offsetX > 131) {
-  //   isMouseDown.value = false;
-  //   isDragging.value = false;
-  //   return;
-  // }
-
   currentOffset.value = target.offsetTop;
   offsetDiff = currentOffset.value - initialPosition;
 
