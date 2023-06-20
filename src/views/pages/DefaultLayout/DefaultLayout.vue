@@ -27,7 +27,7 @@ import Button from '@/components/molecules/Button';
 import IconLoader from '@/components/atoms/IconLoader';
 import { onMounted, onUnmounted, ref } from 'vue';
 
-const sidebarOpen = ref(true);
+const sidebarOpen = ref(false);
 
 function sidebarToggle() {
   sidebarOpen.value = !sidebarOpen.value;

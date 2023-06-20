@@ -17,30 +17,35 @@ export function getWeekDates(days: number = 7) {
 }
 
 /**
- * Outputs the current week number, based on the first element from the `getWeekDates` array.
+ * Outputs the current date as a string Date (YYYY-MM-DD)
  */
+export function getCurrentDate() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
 
-export function getWeekNumber(weekDates: Date[]): number {
-  if (weekDates.length === 0) return 0;
+  return `${year}-${month}-${day}`;
+}
 
-  if (weekDates.length === 0) return 0;
+/**
+ * Outputs the current week number, based on the provided date.
+ */
+export function getWeekNumber(date: number | string): number {
+  const dateObj = new Date(date);
+  dateObj.setHours(0, 0, 0, 0); // Set time to 00:00:00 to ensure consistency
 
-  const firstDate = new Date(weekDates[0]);
-  const lastDate = new Date(weekDates[weekDates.length - 1]);
+  const firstDayOfYear = new Date(dateObj.getFullYear(), 0, 1);
+  const daysOffset = (firstDayOfYear.getDay() + 6) % 7; // Number of days to adjust the start of the year
 
-  const firstDayOfYear = new Date(firstDate.getFullYear(), 0, 1);
   const diffInDays = Math.floor(
-    (firstDate.getTime() - firstDayOfYear.getTime()) / (1000 * 60 * 60 * 24)
+    (dateObj.getTime() -
+      firstDayOfYear.getTime() -
+      daysOffset * 24 * 60 * 60 * 1000) /
+      (24 * 60 * 60 * 1000)
   );
 
-  const firstDayOfWeek = (firstDayOfYear.getDay() + 6) % 7; // Adjust Sunday to be the last day of the week
-
-  const weekNumber = Math.ceil((diffInDays - firstDayOfWeek + 1) / 7);
-
-  // Adjust the week number if the last date falls on Sunday
-  if (lastDate.getDay() === 0) {
-    return weekNumber - 1;
-  }
+  const weekNumber = Math.ceil(diffInDays / 7) + 1; // Add 1 to account for Sunday belonging to the next week
 
   return weekNumber;
 }
@@ -48,7 +53,6 @@ export function getWeekNumber(weekDates: Date[]): number {
 /**
  * Moves the current calendar view forward based on the passed week dates
  */
-
 export function moveWeekForward(weekDates: number[]) {
   const nextWeekDates: number[] = [];
   const interval = weekDates.length * 24 * 60 * 60 * 1000;
@@ -60,7 +64,6 @@ export function moveWeekForward(weekDates: number[]) {
 /**
  * Moves the current calendar view back based on the passed week dates
  */
-
 export function moveWeekBack(weekDates: number[]) {
   const previousWeekDates: number[] = [];
   const interval = weekDates.length * 24 * 60 * 60 * 1000;
@@ -70,7 +73,7 @@ export function moveWeekBack(weekDates: number[]) {
 }
 
 /**
- * Converts an array with dates, in miliseconds, to an array with string dates
+ * Converts an array with dates, in miliseconds, to an array with string dates (YYYY-MM-DD)
  */
 export function convertWeekDatesToStrings(datesArray: number[]) {
   return datesArray.map((date) => {
