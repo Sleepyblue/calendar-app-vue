@@ -28,11 +28,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { formatHoursRange } from '@/utils/Hours';
 import EventModal from '@/components/atoms/EventModal';
 
-const props = defineProps<{
+const { eventStartHour, eventEndHour } = defineProps<{
   eventDate: string;
   eventId: string;
   eventTitle: string;
@@ -43,11 +43,11 @@ const props = defineProps<{
 const show = ref(false);
 
 const hourRange = computed(() =>
-  formatHoursRange(props.eventStartHour, props.eventEndHour, true)
+  formatHoursRange(eventStartHour, eventEndHour, true)
 );
 
 const isShort = computed(() =>
-  props.eventEndHour - props.eventStartHour < 2 ? true : false
+  eventEndHour - eventStartHour < 2 ? true : false
 );
 </script>
 

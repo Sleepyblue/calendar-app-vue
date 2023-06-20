@@ -17,6 +17,18 @@ export function getWeekDates(days: number = 7) {
 }
 
 /**
+ * Outputs the current date as a string Date (YYYY-MM-DD)
+ */
+export function getCurrentDate() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+/**
  * Outputs the current week number, based on the provided date.
  */
 export function getWeekNumber(date: number | string): number {

@@ -18,7 +18,12 @@
       @click="handleModal"
       >Add Event</Button
     >
-    <EventModal v-if="showModal" :show="showModal" @close="handleModal" />
+    <EventModal
+      v-if="showModal"
+      :date="todayDate"
+      :show="showModal"
+      @close="handleModal"
+    />
   </div>
 </template>
 
@@ -27,11 +32,12 @@ import { ref, computed } from 'vue';
 import Button from '@/components/molecules/Button';
 import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
-import { moveWeekBack, moveWeekForward } from '@/utils/Dates';
+import { moveWeekBack, moveWeekForward, getCurrentDate } from '@/utils/Dates';
 
 const store = useCalendarStore();
 const updateView = store.updateWeekDates;
 const showModal = ref(false);
+const todayDate = ref();
 
 // TODO: Rework this as an external snippet
 let month = computed(() => {
@@ -50,6 +56,7 @@ function moveBackwards() {
 }
 
 function handleModal() {
+  todayDate.value = getCurrentDate();
   showModal.value = !showModal.value;
 }
 </script>
