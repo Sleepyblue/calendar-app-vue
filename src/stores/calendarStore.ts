@@ -5,8 +5,8 @@ import { getWeekNumber } from '@/utils/Dates';
 import UniqueIdentifier from '@/utils/UniqueIdentifier';
 
 export const useCalendarStore = defineStore('calendar', () => {
-  const weekDates = ref();
-  const weekNumber = computed(() => getWeekNumber([weekDates.value[0]]));
+  const weekDates = ref<number[]>();
+  const weekNumber = computed(() => getWeekNumber(weekDates.value![0]));
   const calendarEvents = ref<CalendarEvents[]>([]);
   const weekEvents = computed(() => {
     const findWeek = calendarEvents.value.find(
@@ -29,7 +29,7 @@ export const useCalendarStore = defineStore('calendar', () => {
     startHour: number,
     endHour: number
   ) {
-    const weekMatches = weekNumber.value === getWeekNumber([new Date(date)]);
+    const weekMatches = weekNumber.value === getWeekNumber(date);
 
     if (weekMatches && weekEvents.value) {
       weekEvents.value.events.push({
@@ -41,7 +41,7 @@ export const useCalendarStore = defineStore('calendar', () => {
       });
     } else {
       calendarEvents.value.push({
-        weekNumber: getWeekNumber([new Date(date)]),
+        weekNumber: getWeekNumber(date),
         events: [
           {
             id: UniqueIdentifier(),
@@ -53,6 +53,8 @@ export const useCalendarStore = defineStore('calendar', () => {
         ],
       });
     }
+
+    console.log(calendarEvents.value);
   }
 
   function updateEvent(
@@ -85,7 +87,7 @@ export const useCalendarStore = defineStore('calendar', () => {
   }
 
   function moveEvent(event: DayEvent) {
-    const checkWeekNumber = getWeekNumber([new Date(event.date)]);
+    const checkWeekNumber = getWeekNumber(event.date);
     const checkWeekExists = calendarEvents.value.find(
       (week) => week.weekNumber === checkWeekNumber
     );
