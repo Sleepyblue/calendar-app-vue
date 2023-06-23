@@ -31,6 +31,7 @@
         :eventStartHour="event.startHour"
         :eventEndHour="event.endHour"
         class="pointer-events-auto absolute cursor-pointer"
+        @openEventDisplay="$emit('openEventDisplay', $event)"
       />
     </div>
     <EventModal
