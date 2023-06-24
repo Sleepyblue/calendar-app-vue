@@ -4,7 +4,7 @@
 
 
 ## Type of change
-[comment]: # (They can be: ✨ Feature | 🐞 Bug | 📙 Documentation | 🧶 Chore | 🧬 Refactor | ⚡ Test | 🌈 Styling | 🔥 Enhancement | 💣 Breaking Change | 📦 Package)
+[comment]: # (They can be: ⭐ Feature | 🐞 Bug | 📙 Documentation | 🧶 Chore | 🧬 Refactor | ⚡ Test | 🌈 Styling | 🔥 Enhancement | 💣 Breaking Change | 📦 Package)
 
 - [ ] 
 
