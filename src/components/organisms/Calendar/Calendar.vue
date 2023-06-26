@@ -17,9 +17,10 @@
     <EventDisplay
       v-if="show"
       :offsetTop="offsetTop"
-      :position="position"
       :offsetLeft="offsetLeft"
       :offsetWidth="offsetWidth"
+      :horizontalPosition="horizontalPosition"
+      :translate="translateY"
       @close="show = false"
     />
   </div>
@@ -42,7 +43,8 @@ const offsetLeft = ref(0);
 const offsetWidth = ref(0);
 const storedTarget = ref<HTMLElement | undefined>(undefined);
 const calendar = ref<HTMLElement | null>(null);
-const position = ref('');
+const horizontalPosition = ref('');
+const translateY = ref(false);
 
 function handleDisplayCard(e?: MouseEvent) {
   const target = e?.target as HTMLElement;
@@ -52,33 +54,66 @@ function handleDisplayCard(e?: MouseEvent) {
   } else show.value = false;
 
   storedTarget.value = target;
+  const parentTarget = target.parentElement as HTMLElement;
 
   if (!storedTarget.value) return;
 
-  target.scrollIntoView({ block: 'center', behavior: 'smooth' });
-  setTimeout(() => {
-    const parentTarget = target.parentElement as HTMLElement;
+  const styles = window.getComputedStyle(target);
+  const gridRowStart = +styles.getPropertyValue('grid-row-start');
+  const gridRowEnd = +styles.getPropertyValue('grid-row-end');
 
+  if (gridRowEnd - gridRowStart > 16) {
+    target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    console.log('start');
+  } else {
+    target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    console.log('center');
+  }
+
+  // 'Waiting' for `scrollIntoView` to finish before calculating offsets. Avoids misplacements
+  setTimeout(() => {
     offsetTop.value = target.getBoundingClientRect().top;
     offsetLeft.value = parentTarget.offsetLeft;
     offsetWidth.value = parentTarget.offsetWidth;
 
+    // Adjusting the scrolling behaviour for longer events
+    if (gridRowEnd - gridRowStart > 16 && gridRowEnd - gridRowStart <= 18) {
+      calendar.value?.scrollBy({ top: -60, behavior: 'smooth' });
+    } else if (gridRowEnd - gridRowStart > 18) {
+      calendar.value?.scrollBy({ top: -120, behavior: 'auto' });
+    }
+
+    // Placing the preview taking in account the available bottom space
+    if (gridRowStart >= 18) {
+      offsetTop.value = target.getBoundingClientRect().bottom;
+      translateY.value = true;
+    } else {
+      translateY.value = false;
+    }
+
+    // Placing the preview taking in account the available right space
     const targetRight = target.getBoundingClientRect().right;
     const calendarWidth = calendar.value!.getBoundingClientRect().width;
     const percentage = Math.round((targetRight / calendarWidth) * 100);
 
     const verdict = percentage > 60 ? 'right' : 'left';
-    position.value = verdict;
+    horizontalPosition.value = verdict;
 
     if (!show.value) show.value = true;
-  }, 300);
+  }, 450);
 }
 
 function updateDisplayCardPosition(targetEl?: HTMLElement) {
   if (!storedTarget.value) return;
   const parentTarget = targetEl?.parentElement as HTMLElement;
+  const styles = window.getComputedStyle(targetEl!);
+  const gridRowStart = +styles.getPropertyValue('grid-row-start');
 
-  offsetTop.value = targetEl!.getBoundingClientRect().top;
+  if (gridRowStart >= 18) {
+    offsetTop.value = targetEl!.getBoundingClientRect().bottom;
+  } else {
+    offsetTop.value = targetEl!.getBoundingClientRect().top;
+  }
   offsetLeft.value = parentTarget.offsetLeft;
   offsetWidth.value = parentTarget.offsetWidth;
 }
