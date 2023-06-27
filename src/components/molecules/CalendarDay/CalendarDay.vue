@@ -112,11 +112,12 @@ function handleMouseMove(e: MouseEvent) {
     height.value = offsetDiff + 50;
   } else {
     changeOffset.value = true;
-    height.value = Math.abs(offsetDiff);
+    height.value = Math.abs(offsetDiff) + target.offsetHeight;
 
     if (offsetDiff === -50) {
-      const containerHeight = (target.offsetParent! as HTMLElement)
-        .offsetHeight;
+      const containerHeight =
+        (target.offsetParent! as HTMLElement).offsetHeight -
+        target.offsetHeight;
       position.value = containerHeight - target.offsetTop - target.offsetHeight;
     }
   }
@@ -132,7 +133,7 @@ function handleMouseUp(e: MouseEvent) {
   if (offsetDiff >= 0) {
     endHour.value = +target.dataset.hour!;
   } else {
-    endHour.value = startHour.value;
+    endHour.value = startHour.value + 1;
     startHour.value = +target.dataset.hour! - 1;
   }
 
