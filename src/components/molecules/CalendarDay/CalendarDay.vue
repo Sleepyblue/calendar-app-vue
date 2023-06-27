@@ -31,7 +31,7 @@
         :eventStartHour="event.startHour"
         :eventEndHour="event.endHour"
         class="pointer-events-auto absolute cursor-pointer"
-        @openEventDisplay="$emit('openEventDisplay', $event)"
+        @openEventDisplay="emit('openEventDisplay', $event)"
       />
     </div>
     <EventModal
@@ -57,6 +57,10 @@ import { convertDateToShorthand } from '@/utils/Dates';
 const { day } = defineProps<{
   day: string;
   index: number;
+}>();
+
+const emit = defineEmits<{
+  (e: 'openEventDisplay', event: MouseEvent): void;
 }>();
 
 const store = useCalendarStore();
