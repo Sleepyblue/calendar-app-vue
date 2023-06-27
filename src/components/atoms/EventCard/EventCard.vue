@@ -28,6 +28,9 @@ const { eventStartHour, eventEndHour } = defineProps<{
   eventEndHour: number;
 }>();
 
+const startHourFix = computed(() => eventStartHour + 1);
+const endHourFix = computed(() => eventEndHour + 1);
+
 const hourRange = computed(() =>
   formatHoursRange(eventStartHour, eventEndHour, true)
 );
@@ -42,10 +45,10 @@ const isShort = computed(() =>
   height: calc(100% - 2px);
   background-color: #f5a278;
   box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
-  grid-row-start: v-bind('eventStartHour + 1');
+  grid-row-start: v-bind('startHourFix');
 }
 
 .grid-end {
-  grid-row-end: v-bind('eventEndHour + 1');
+  grid-row-end: v-bind('endHourFix');
 }
 </style>

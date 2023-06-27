@@ -3,14 +3,14 @@
     <CalendarHeader :shortDate="shortDayDate" :dateTime="day" />
     <div
       :id="day"
-      class="calendar-day__grid relative h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-r"
+      class="calendar-day relative h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-r"
       :class="{ 'border-r-0': index === 6 }"
     >
       <!-- Convert to atom -->
-      <div
+      <time
         v-for="(t, index) in 24"
-        :data-hour="t - 1"
-        class="hour__grid-area relative flex border-b"
+        :data-hour="t"
+        class="day-hour relative flex border-b"
         :class="{ 'border-b-0': index === 23, 'cursor-move': isMouseDown }"
         @click="handleModal"
         @mousedown.prevent="handleMouseDown"
@@ -95,7 +95,7 @@ function handleMouseDown(e: MouseEvent) {
   isMouseDown.value = true;
   position.value = target.offsetTop;
   initialPosition = position.value;
-  startHour.value = +target.dataset.hour!;
+  startHour.value = +target.dataset.hour! - 1;
 }
 
 function handleMouseMove(e: MouseEvent) {
@@ -133,7 +133,7 @@ function handleMouseUp(e: MouseEvent) {
     endHour.value = +target.dataset.hour!;
   } else {
     endHour.value = startHour.value;
-    startHour.value = +target.dataset.hour!;
+    startHour.value = +target.dataset.hour! - 1;
   }
 
   showModal.value = true;
@@ -145,21 +145,11 @@ const events = computed(() =>
 </script>
 
 <style>
-.calendar-day__grid {
+.calendar-day {
   display: grid;
-  grid-template-areas: 'day';
 }
 
-.event__grid-area {
-  grid-row: 1/-1;
-  grid-area: 'day';
-}
-
-.hour__grid-area {
-  grid-area: 'day';
-}
-
-.hour__grid-area:hover {
+.day-hour:hover {
   background-color: rgba(245, 162, 120, 0.4);
 }
 </style>
