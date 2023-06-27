@@ -2,7 +2,7 @@
   <article
     class="event-card flex w-11/12 flex-col items-start justify-start gap-1 rounded-md px-2 py-1 text-white"
     :class="{ 'grid-end': eventEndHour }"
-    @click="$emit('openEventDisplay', $event)"
+    @click="emit('openEventDisplay', $event)"
   >
     <p
       class="pointer-events-none w-full shrink-0 truncate whitespace-normal text-xs font-bold"
@@ -26,6 +26,10 @@ const { eventStartHour, eventEndHour } = defineProps<{
   eventTitle: string;
   eventStartHour: number;
   eventEndHour: number;
+}>();
+
+const emit = defineEmits<{
+  (e: 'openEventDisplay', event: MouseEvent): void;
 }>();
 
 const startHourFix = computed(() => eventStartHour + 1);
