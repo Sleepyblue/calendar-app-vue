@@ -1,8 +1,9 @@
 import { defineConfig } from 'histoire';
 import { HstVue } from '@histoire/plugin-vue';
+import { tailwindTokens } from 'histoire/dist/node/builtin-plugins/tailwind-tokens';
 
 export default defineConfig({
-  plugins: [HstVue()],
+  plugins: [HstVue(), tailwindTokens({ configFile: '' })],
   setupFile: '/src/histoire.setup.ts',
   tree: {
     groups: [
