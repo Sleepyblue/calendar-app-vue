@@ -3,14 +3,14 @@
     <CalendarHeader :shortDate="shortDayDate" :dateTime="day" />
     <div
       :id="day"
-      class="calendar-day relative h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-r"
+      class="calendar-day relative z-[-1] h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-r"
       :class="{ 'border-r-0': index === 6 }"
     >
       <!-- Convert to atom -->
       <time
         v-for="(t, index) in 24"
         :data-hour="t"
-        class="day-hour relative flex border-b"
+        class="day-hour relative z-[-1] flex border-b"
         :class="{ 'border-b-0': index === 23, 'cursor-move': isMouseDown }"
         @click="emitOpenModal($event, startHour, endHour)"
         @mousedown.prevent="handleMouseDown"
@@ -31,7 +31,7 @@
         :eventStartHour="event.startHour"
         :eventEndHour="event.endHour"
         class="pointer-events-auto absolute cursor-pointer"
-        @openEventDisplay="emit('openEventDisplay', $event)"
+        @openEventDisplay="emitOpenDisplay($event)"
       />
     </div>
   </div>
@@ -82,6 +82,10 @@ function emitOpenModal(e: MouseEvent, startHour: number, endHour: number) {
     startHour: startHour,
     endHour: endHour,
   });
+}
+
+function emitOpenDisplay(e: MouseEvent) {
+  emit('openEventDisplay', e);
 }
 
 function handleMouseDown(e: MouseEvent) {
