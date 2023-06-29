@@ -2,6 +2,7 @@
   <article
     class="event-card flex w-11/12 flex-col items-start justify-start gap-1 rounded-md px-2 py-1 text-white"
     :class="{ 'grid-end': eventEndHour }"
+    :data-id="eventId"
     @click="emit('openEventDisplay', $event)"
   >
     <p

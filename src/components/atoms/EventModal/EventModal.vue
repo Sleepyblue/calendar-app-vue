@@ -46,13 +46,6 @@
     <template #action>
       <Button
         v-if="edit"
-        class="rounded-lg bg-red-400 px-3 py-2 font-bold text-white active:translate-y-[1px]"
-        icon="Trash"
-        type="submit"
-        @click.prevent="deleteEvent(id as any)"
-      />
-      <Button
-        v-if="edit"
         class="rounded-lg bg-[#f5a278] px-6 py-2 font-bold text-white active:translate-y-[1px]"
         type="submit"
         @click.prevent="editEvent(id as any)"
@@ -72,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import ModalTemplate from '@/components/templates/ModalTemplate/ModalTemplate.vue';
 import Button from '@/components/molecules/Button';
 import { useCalendarStore } from '@/stores/calendarStore';
@@ -92,7 +85,7 @@ const emit = defineEmits<{
 }>();
 
 const store = useCalendarStore();
-const deleteEvent = store.deleteEvent;
+const findEvent = store.findWeekViewEvent;
 const titleInput = ref<HTMLInputElement | null>(null);
 const dateInput = ref<HTMLInputElement | null>(null);
 const startHourInput = ref<HTMLInputElement | null>(null);
@@ -104,6 +97,18 @@ const eventTitle = ref(title || '');
 const eventDate = ref(date || '');
 const eventStartHour = ref(startHour);
 const eventEndHour = ref(endHour);
+
+onMounted(() => {
+  if (id) {
+    const event = findEvent(id!);
+
+    if (!event) return;
+    eventTitle.value = event.title;
+    eventDate.value = event.date;
+    eventStartHour.value = event?.startHour;
+    eventEndHour.value = event?.endHour;
+  }
+});
 
 function onChange() {
   if (eventEndHour.value! < eventStartHour.value!)
