@@ -12,7 +12,7 @@
         :data-hour="t"
         class="day-hour relative flex border-b"
         :class="{ 'border-b-0': index === 23, 'cursor-move': isMouseDown }"
-        @click="handleModal"
+        @click="emitOpenModal($event, startHour, endHour)"
         @mousedown.prevent="handleMouseDown"
         @mousemove.self="handleMouseMove"
         @mouseup.stop="handleMouseUp"
@@ -34,14 +34,6 @@
         @openEventDisplay="emit('openEventDisplay', $event)"
       />
     </div>
-    <EventModal
-      v-if="showModal"
-      :show="showModal"
-      :date="date"
-      :startHour="startHour"
-      :endHour="endHour"
-      @close="showModal = false"
-    />
   </div>
 </template>
 
@@ -50,7 +42,6 @@ import { computed, ref } from 'vue';
 import CalendarHeader from '@/components/molecules/CalendarHeader';
 import EventCard from '@/components/atoms/EventCard';
 import PreviewCard from '@/components/atoms/PreviewCard';
-import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertDateToShorthand } from '@/utils/Dates';
 
@@ -59,13 +50,19 @@ const { day } = defineProps<{
   index: number;
 }>();
 
+interface modalEmit {
+  event: MouseEvent;
+  startHour: number;
+  endHour: number;
+}
+
 const emit = defineEmits<{
   (e: 'openEventDisplay', event: MouseEvent): void;
+  (e: 'openEventModal', value: modalEmit): void;
 }>();
 
 const store = useCalendarStore();
 const shortDayDate = computed(() => convertDateToShorthand(day));
-const showModal = ref(false);
 const date = ref('');
 const startHour = ref(0);
 const endHour = ref(0);
@@ -79,19 +76,12 @@ const currentOffset = ref();
 let initialPosition = 0;
 let offsetDiff = 0;
 
-function handleModal(e: MouseEvent) {
-  showModal.value = true;
-
-  if (showModal.value) {
-    date.value = day;
-    if (!date) return;
-
-    startHour.value = +(e.target as HTMLElement).dataset.hour!;
-    if (!startHour.value) return;
-
-    endHour.value = 0;
-    if (!endHour.value) return;
-  }
+function emitOpenModal(e: MouseEvent, startHour: number, endHour: number) {
+  emit('openEventModal', {
+    event: e,
+    startHour: startHour,
+    endHour: endHour,
+  });
 }
 
 function handleMouseDown(e: MouseEvent) {
@@ -141,7 +131,7 @@ function handleMouseUp(e: MouseEvent) {
     startHour.value = +target.dataset.hour! - 1;
   }
 
-  showModal.value = true;
+  emitOpenModal(e, startHour.value, endHour.value);
 }
 
 const events = computed(() =>

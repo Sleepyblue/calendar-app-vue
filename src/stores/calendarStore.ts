@@ -1,4 +1,4 @@
-import { ref, computed, toRaw } from 'vue';
+import { ref, computed, toRaw, watch } from 'vue';
 import { defineStore } from 'pinia';
 import type { CalendarEvents, DayEvent } from '@/types';
 import { getWeekNumber } from '@/utils/Dates';
@@ -53,6 +53,16 @@ export const useCalendarStore = defineStore('calendar', () => {
         ],
       });
     }
+  }
+
+  function findWeekViewEvent(id: string) {
+    const currentViewWeek = calendarEvents.value.find(
+      (week) => week.weekNumber === weekNumber.value
+    );
+
+    const event = currentViewWeek?.events.find((event) => event.id === id);
+
+    return event;
   }
 
   function updateEvent(
@@ -121,5 +131,6 @@ export const useCalendarStore = defineStore('calendar', () => {
     addEvent,
     updateEvent,
     deleteEvent,
+    findWeekViewEvent,
   };
 });

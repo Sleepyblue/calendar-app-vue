@@ -4,11 +4,13 @@
     <div class="flex items-center gap-8">
       <Button
         icon="LeftArrow"
+        :size="14"
         class="rounded-md bg-slate-100 p-2 text-black active:translate-y-[1px]"
         @click="moveBackwards"
       />
       <Button
         icon="RightArrow"
+        :size="14"
         class="rounded-md bg-slate-100 p-2 text-black active:translate-y-[1px]"
         @click="moveForward"
       />

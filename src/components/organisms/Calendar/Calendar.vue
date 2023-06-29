@@ -13,15 +13,28 @@
       :day="day"
       :index="index"
       @openEventDisplay="handleDisplayCard"
+      @openEventModal="handleModal"
     />
     <EventDisplay
       v-if="show"
+      :id="id"
       :offsetTop="offsetTop"
       :offsetLeft="offsetLeft"
       :offsetWidth="offsetWidth"
       :horizontalPosition="horizontalPosition"
       :translate="translateY"
       @close="show = false"
+      @openEditModal="handleEditModal"
+    />
+    <EventModal
+      v-if="showModal"
+      :show="showModal"
+      :edit="showEditModal"
+      :id="id"
+      :date="date"
+      :startHour="startHour"
+      :endHour="endHour"
+      @close="showModal = false"
     />
   </div>
 </template>
@@ -31,13 +44,22 @@ import { ref, computed, onUpdated } from 'vue';
 import CalendarDay from '@/components/molecules/CalendarDay';
 import CalendarHours from '@/components/atoms/CalendarHours';
 import EventDisplay from '@/components/atoms/EventDisplay';
+import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertWeekDatesToStrings } from '@/utils/Dates';
+
+interface modalEmit {
+  event: MouseEvent;
+  startHour: number;
+  endHour: number;
+}
 
 const store = useCalendarStore();
 const weekDates = computed(() => convertWeekDatesToStrings(store.weekDates!));
 
 const show = ref(false);
+const showModal = ref(false);
+const showEditModal = ref(false);
 const offsetTop = ref(0);
 const offsetLeft = ref(0);
 const offsetWidth = ref(0);
@@ -45,6 +67,34 @@ const storedTarget = ref<HTMLElement | undefined>(undefined);
 const calendar = ref<HTMLElement | null>(null);
 const horizontalPosition = ref('');
 const translateY = ref(false);
+const id = ref();
+const date = ref();
+const startHour = ref(0);
+const endHour = ref(0);
+
+function handleEditModal(eventId: string) {
+  id.value = eventId;
+  showEditModal.value = true;
+  showModal.value = true;
+}
+
+function handleModal(emitted: modalEmit) {
+  const target = emitted.event?.target as HTMLElement;
+
+  if (!target) return;
+  id.value = target.getAttribute('data-id');
+  date.value = target.parentElement?.id;
+
+  if (!date === undefined) return;
+
+  startHour.value = emitted.startHour;
+  if (!startHour.value === undefined) return;
+
+  endHour.value = emitted.endHour;
+  show.value = false;
+  showModal.value = true;
+  if (!endHour.value === undefined) return;
+}
 
 function handleDisplayCard(e?: MouseEvent) {
   const target = e?.target as HTMLElement;
@@ -53,6 +103,7 @@ function handleDisplayCard(e?: MouseEvent) {
     return;
   } else show.value = false;
 
+  id.value = target.getAttribute('data-id');
   storedTarget.value = target;
   const parentTarget = target.parentElement as HTMLElement;
 
@@ -64,10 +115,8 @@ function handleDisplayCard(e?: MouseEvent) {
 
   if (gridRowEnd - gridRowStart > 16) {
     target.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    console.log('start');
   } else {
     target.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    console.log('center');
   }
 
   // 'Waiting' for `scrollIntoView` to finish before calculating offsets. Avoids misplacements
