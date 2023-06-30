@@ -4,7 +4,7 @@
       id="modal"
       :open="show"
       ref="trapRef"
-      class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center"
+      class="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center"
       @keydown.esc.exact="closeModal"
       @click.self="closeModal"
     >

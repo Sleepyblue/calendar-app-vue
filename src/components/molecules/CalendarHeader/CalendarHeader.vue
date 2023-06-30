@@ -1,7 +1,5 @@
 <template>
-  <header
-    class="calendar-header sticky left-0 top-0 z-10 h-[4%] place-items-center bg-slate-100"
-  >
+  <header class="calendar-header place-items-center">
     <time :datetime="dateTime" class="text-center text-black">
       {{ shortDate }}
     </time>

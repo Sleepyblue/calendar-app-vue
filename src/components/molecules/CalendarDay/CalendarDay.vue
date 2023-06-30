@@ -1,6 +1,5 @@
 <template>
-  <div class="h-full" :data-day="day">
-    <CalendarHeader :shortDate="shortDayDate" :dateTime="day" />
+  <div class="day-z h-full" :data-day="day">
     <div
       :id="day"
       class="calendar-day relative z-[-1] h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))] border-r"
@@ -39,11 +38,9 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import CalendarHeader from '@/components/molecules/CalendarHeader';
 import EventCard from '@/components/atoms/EventCard';
 import PreviewCard from '@/components/atoms/PreviewCard';
 import { useCalendarStore } from '@/stores/calendarStore';
-import { convertDateToShorthand } from '@/utils/Dates';
 
 const { day } = defineProps<{
   day: string;
@@ -62,7 +59,6 @@ const emit = defineEmits<{
 }>();
 
 const store = useCalendarStore();
-const shortDayDate = computed(() => convertDateToShorthand(day));
 const date = ref('');
 const startHour = ref(0);
 const endHour = ref(0);
@@ -107,12 +103,12 @@ function handleMouseMove(e: MouseEvent) {
   if (offsetDiff >= 0) {
     changeOffset.value = false;
     position.value = initialPosition;
-    height.value = offsetDiff + 50;
+    height.value = offsetDiff + 49;
   } else {
     changeOffset.value = true;
     height.value = Math.abs(offsetDiff) + target.offsetHeight;
 
-    if (offsetDiff === -50) {
+    if (offsetDiff === -49 || offsetDiff === -48) {
       const containerHeight =
         (target.offsetParent! as HTMLElement).offsetHeight -
         target.offsetHeight;
@@ -146,6 +142,10 @@ const events = computed(() =>
 <style>
 .calendar-day {
   display: grid;
+}
+
+.day-z {
+  z-index: 0;
 }
 
 .day-hour:hover {

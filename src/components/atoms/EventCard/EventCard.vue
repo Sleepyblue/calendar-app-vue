@@ -50,8 +50,6 @@ const isShort = computed(() =>
 
 function handleEventCardClick(e: MouseEvent) {
   emit('openEventDisplay', e);
-  console.log(eventCard.value);
-
   if (eventCard.value) eventCard.value.focus();
 }
 </script>
