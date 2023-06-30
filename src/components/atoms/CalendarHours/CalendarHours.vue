@@ -2,7 +2,6 @@
   <div
     class="grid h-full cursor-pointer grid-cols-1 grid-rows-[repeat(24,_minmax(3em,_1fr))]"
   >
-    <div class="sticky left-0 top-0 h-[4%] px-1"></div>
     <div
       v-for="hour in hours"
       :hour="hour"

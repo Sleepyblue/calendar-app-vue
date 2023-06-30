@@ -1,41 +1,46 @@
 <template>
-  <div
-    id="calendar"
-    ref="calendar"
-    class="grid grid-cols-8 overflow-x-hidden overflow-y-scroll"
-    v-on="show ? { scroll: handlePositionUpdate } : {}"
-  >
-    <CalendarHours class="z-0" />
-    <CalendarDay
-      class="z-0"
-      v-for="(day, index) in weekDates"
-      :key="day"
-      :day="day"
-      :index="index"
-      @openEventDisplay="handleDisplayCard"
-      @openEventModal="handleModal"
-    />
-    <EventDisplay
-      v-if="show"
-      :id="id"
-      :offsetTop="offsetTop"
-      :offsetLeft="offsetLeft"
-      :offsetWidth="offsetWidth"
-      :horizontalPosition="horizontalPosition"
-      :translate="translateY"
-      @close="show = false"
-      @openEditModal="handleEditModal"
-    />
-    <EventModal
-      v-if="showModal"
-      :show="showModal"
-      :edit="showEditModal"
-      :id="id"
-      :date="date"
-      :startHour="startHour"
-      :endHour="endHour"
-      @close="showModal = false"
-    />
+  <div id="calendar" ref="calendar" class="overflow-x-hidden overflow-y-scroll">
+    <header class="sticky left-0 top-0 z-50 grid grid-cols-8 bg-slate-100 pb-4">
+      <!-- TODO: Rework this -->
+      <div class="px-1" />
+      <CalendarHeader
+        v-for="day in weekDates"
+        :shortDate="convertDateToShorthand(day)"
+        :dateTime="day"
+      />
+    </header>
+    <main class="relative grid grid-cols-8">
+      <CalendarHours />
+      <CalendarDay
+        v-for="(day, index) in weekDates"
+        :key="day"
+        :day="day"
+        :index="index"
+        @openEventDisplay="handleDisplayCard"
+        @openEventModal="handleModal"
+      />
+      <EventDisplay
+        v-if="show"
+        :id="id"
+        :offsetTop="offsetTop"
+        :offsetLeft="offsetLeft"
+        :offsetWidth="offsetWidth"
+        :horizontalPosition="horizontalPosition"
+        :translate="translateY"
+        @close="show = false"
+        @openEditModal="handleEditModal"
+      />
+      <EventModal
+        v-if="showModal"
+        :show="showModal"
+        :edit="showEditModal"
+        :id="id"
+        :date="date"
+        :startHour="startHour"
+        :endHour="endHour"
+        @close="showModal = false"
+      />
+    </main>
   </div>
 </template>
 
@@ -43,10 +48,12 @@
 import { ref, computed, onUpdated } from 'vue';
 import CalendarDay from '@/components/molecules/CalendarDay';
 import CalendarHours from '@/components/atoms/CalendarHours';
+import CalendarHeader from '@/components/molecules/CalendarHeader';
 import EventDisplay from '@/components/atoms/EventDisplay';
 import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
 import { convertWeekDatesToStrings } from '@/utils/Dates';
+import { convertDateToShorthand } from '@/utils/Dates';
 
 interface modalEmit {
   event: MouseEvent;
@@ -55,6 +62,7 @@ interface modalEmit {
 }
 
 const store = useCalendarStore();
+// const shortDayDate = computed(() => convertDateToShorthand(day));
 const weekDates = computed(() => convertWeekDatesToStrings(store.weekDates!));
 
 const show = ref(false);
@@ -121,7 +129,7 @@ function handleDisplayCard(e?: MouseEvent) {
 
   // 'Waiting' for `scrollIntoView` to finish before calculating offsets. Avoids misplacements
   setTimeout(() => {
-    offsetTop.value = target.getBoundingClientRect().top;
+    offsetTop.value = target.offsetTop;
     offsetLeft.value = parentTarget.offsetLeft;
     offsetWidth.value = parentTarget.offsetWidth;
 
@@ -134,7 +142,7 @@ function handleDisplayCard(e?: MouseEvent) {
 
     // Placing the preview taking in account the available bottom space
     if (gridRowStart >= 18) {
-      offsetTop.value = target.getBoundingClientRect().bottom;
+      offsetTop.value = target!.offsetTop + target!.offsetHeight;
       translateY.value = true;
     } else {
       translateY.value = false;
@@ -159,10 +167,11 @@ function updateDisplayCardPosition(targetEl?: HTMLElement) {
   const gridRowStart = +styles.getPropertyValue('grid-row-start');
 
   if (gridRowStart >= 18) {
-    offsetTop.value = targetEl!.getBoundingClientRect().bottom;
+    offsetTop.value = targetEl!.offsetTop + targetEl!.offsetHeight;
   } else {
-    offsetTop.value = targetEl!.getBoundingClientRect().top;
+    offsetTop.value = targetEl!.offsetTop;
   }
+
   offsetLeft.value = parentTarget.offsetLeft;
   offsetWidth.value = parentTarget.offsetWidth;
 }
@@ -181,6 +190,11 @@ onUpdated(() => {
 </script>
 
 <style>
+#calendar {
+  display: grid;
+  grid-template-rows: minmax(0, 50px) minmax(0, 1fr);
+}
+
 #calendar::-webkit-scrollbar {
   width: 18px;
   background-color: theme('backgroundColor.slate.200');
@@ -189,17 +203,7 @@ onUpdated(() => {
 }
 
 #calendar::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    45deg,
-    #f5a278 20%,
-    #f9c7ae 20%,
-    #f9c7ae 40%,
-    #f5a278 40%,
-    #f5a278 60%,
-    #f9c7ae 60%,
-    #f9c7ae 80%,
-    #f5a278 80%
-  );
+  background: #f5a278;
   border-radius: 50px;
   border: 6px solid theme('borderColor.slate.200');
 }

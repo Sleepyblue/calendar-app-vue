@@ -1,7 +1,7 @@
 <template>
   <div
     id="event-display"
-    class="absolute h-64 w-96 rounded-md bg-slate-100"
+    class="absolute z-20 h-64 w-96 overflow-hidden rounded-md bg-slate-100"
     :class="[
       { 'card-translateX': horizontalPosition === 'right' },
       { 'card-translateY': translate },
@@ -76,8 +76,6 @@ const offsetSum = computed(() => {
   else return offsetLeft;
 });
 
-const refinedOffsetTop = computed(() => offsetTop - 12);
-
 function handleEditModal() {
   emit('openEditModal', id!);
   closeDisplay();
@@ -103,7 +101,7 @@ onMounted(() => {
 
 <style>
 #event-display {
-  top: v-bind(refinedOffsetTop + 'px');
+  top: v-bind(offsetTop + 'px');
   left: v-bind(offsetSum + 'px');
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -112,6 +110,7 @@ onMounted(() => {
 .card-translateX {
   transform: translateX(-108%);
 }
+
 .card-translateY {
   transform: translateY(-100%);
 }
