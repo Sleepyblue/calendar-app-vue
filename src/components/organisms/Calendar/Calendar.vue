@@ -44,8 +44,8 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, computed, onUpdated } from 'vue';
+<script setup lang="ts">
+import { ref, computed, onUpdated, watch } from 'vue';
 import CalendarDay from '@/components/molecules/CalendarDay';
 import CalendarHours from '@/components/atoms/CalendarHours';
 import CalendarHeader from '@/components/molecules/CalendarHeader';
@@ -61,8 +61,11 @@ interface modalEmit {
   endHour: number;
 }
 
+const { isSidebarOpen } = defineProps<{
+  isSidebarOpen: boolean;
+}>();
+
 const store = useCalendarStore();
-// const shortDayDate = computed(() => convertDateToShorthand(day));
 const weekDates = computed(() => convertWeekDatesToStrings(store.weekDates!));
 
 const show = ref(false);
@@ -149,11 +152,11 @@ function handleDisplayCard(e?: MouseEvent) {
     }
 
     // Placing the preview taking in account the available right space
-    const targetRight = target.getBoundingClientRect().right;
-    const calendarWidth = calendar.value!.getBoundingClientRect().width;
-    const percentage = Math.round((targetRight / calendarWidth) * 100);
-
+    const calendarRight = calendar.value!.getBoundingClientRect().right;
+    const targetRight = target!.getBoundingClientRect().right;
+    const percentage = Math.round((targetRight / calendarRight) * 100);
     const verdict = percentage > 60 ? 'right' : 'left';
+
     horizontalPosition.value = verdict;
 
     if (!show.value) show.value = true;
@@ -173,6 +176,7 @@ function updateDisplayCardPosition(targetEl?: HTMLElement) {
   }
 
   offsetLeft.value = parentTarget.offsetLeft;
+
   offsetWidth.value = parentTarget.offsetWidth;
 }
 
@@ -187,6 +191,15 @@ onUpdated(() => {
     window.removeEventListener('resize', handlePositionUpdate);
   }
 });
+
+watch(
+  () => isSidebarOpen,
+  () => {
+    setTimeout(() => {
+      handlePositionUpdate();
+    }, 300);
+  }
+);
 </script>
 
 <style>

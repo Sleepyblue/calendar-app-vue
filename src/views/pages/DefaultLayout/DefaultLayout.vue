@@ -10,7 +10,7 @@
       class="relative m-3 flex flex-col gap-4 overflow-hidden rounded-lg bg-slate-100"
     >
       <Header />
-      <Calendar />
+      <Calendar :isSidebarOpen="sidebarOpen" />
       <Button class="absolute left-1 top-1 h-6 w-6" @click="sidebarToggle()">
         <IconLoader v-if="sidebarOpen" name="SidebarCollapse" />
         <IconLoader v-else name="SidebarExpand" />
