@@ -9,15 +9,19 @@
       <time
         v-for="(t, index) in 24"
         :data-hour="t"
-        class="day-hour relative z-[-1] flex border-b"
-        :class="{ 'border-b-0': index === 23, 'cursor-move': isMouseDown }"
+        class="relative z-[-1] flex border-b"
+        :class="{
+          'border-b-0': index === 23,
+          'cursor-move': isMouseDown,
+          'day-hour': !isDragging && !isMouseDown,
+        }"
         @click="emitOpenModal($event, startHour, endHour)"
         @mousedown.prevent="handleMouseDown"
         @mousemove.self="handleMouseMove"
         @mouseup.stop="handleMouseUp"
       />
       <PreviewCard
-        v-if="isDragging && isMouseDown"
+        v-if="isDragging || isMouseDown"
         :changeOffset="changeOffset"
         :position="position"
         :height="height"
@@ -90,12 +94,16 @@ function handleMouseDown(e: MouseEvent) {
   position.value = target.offsetTop;
   initialPosition = position.value;
   startHour.value = +target.dataset.hour! - 1;
+  height.value = 49;
+
+  console.log(height.value);
 }
 
 function handleMouseMove(e: MouseEvent) {
   const target = e.target as HTMLElement;
   if (!isMouseDown.value) return;
   isDragging.value = true;
+  console.log(height.value);
 
   currentOffset.value = target.offsetTop;
   offsetDiff = currentOffset.value - initialPosition;
