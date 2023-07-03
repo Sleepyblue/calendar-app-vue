@@ -78,7 +78,7 @@ function handleEventCardClick(e: MouseEvent) {
   height: calc(100% + 8px);
   transform: translate(-50%, -50%);
   border-radius: 8px;
-  background: linear-gradient(120deg, #f5788d, #78cbf5, #f5788d);
+  background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
   background-size: 300% 300%;
   z-index: -1;
   animation: gradient-animation 4s ease-in-out infinite;

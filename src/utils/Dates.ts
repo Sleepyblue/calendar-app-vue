@@ -85,7 +85,21 @@ export function convertWeekDatesToStrings(datesArray: number[]) {
 }
 
 /**
- * Converts a string Date (YYYY-MM-DD) to a shorter string version of that passed date
+ * Converts a string Date (YYYY-MM-DD) to a shorter string version of that passed date. E.g. "Thu, Feb 04"
+ */
+export function convertDateToShortForm(inputDate: string): string {
+  const dateObj: Date = new Date(inputDate);
+  const formattedDate: string = dateObj.toLocaleString('en-us', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
+
+  return formattedDate;
+}
+
+/**
+ * Converts a string Date (YYYY-MM-DD) to a shorter string version of that passed date. E.g. "MON 17"
  */
 export function convertDateToShorthand(stringDate: string) {
   const date = new Date(stringDate);

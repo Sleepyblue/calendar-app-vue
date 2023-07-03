@@ -30,6 +30,27 @@ defineProps<{
 
 .preview-card {
   background-color: rgba(245, 162, 120, 0.15);
+  border: 2px solid #f5e178;
   border-radius: 12px;
+  background: linear-gradient(
+    120deg,
+    rgba(245, 120, 141, 0.2),
+    rgba(245, 225, 120, 0.2),
+    rgba(245, 120, 141, 0.2)
+  );
+  background-size: 300% 300%;
+  animation: gradient-animation 4s ease-in-out infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 15% 0%;
+  }
+  50% {
+    background-position: 85% 100%;
+  }
+  100% {
+    background-position: 15% 0%;
+  }
 }
 </style>
