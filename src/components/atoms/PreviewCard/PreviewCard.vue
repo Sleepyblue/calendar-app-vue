@@ -30,12 +30,12 @@ defineProps<{
 
 .preview-card {
   background-color: rgba(245, 162, 120, 0.15);
-  border: 2px solid rgba(245, 162, 120, 0.6);
+  border: 2px solid #f5e178;
   border-radius: 12px;
   background: linear-gradient(
     120deg,
     rgba(245, 120, 141, 0.2),
-    rgba(120, 203, 245, 0.2),
+    rgba(245, 225, 120, 0.2),
     rgba(245, 120, 141, 0.2)
   );
   background-size: 300% 300%;

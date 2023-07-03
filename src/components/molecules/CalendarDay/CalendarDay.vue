@@ -95,15 +95,12 @@ function handleMouseDown(e: MouseEvent) {
   initialPosition = position.value;
   startHour.value = +target.dataset.hour! - 1;
   height.value = 49;
-
-  console.log(height.value);
 }
 
 function handleMouseMove(e: MouseEvent) {
   const target = e.target as HTMLElement;
   if (!isMouseDown.value) return;
   isDragging.value = true;
-  console.log(height.value);
 
   currentOffset.value = target.offsetTop;
   offsetDiff = currentOffset.value - initialPosition;
