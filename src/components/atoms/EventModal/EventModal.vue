@@ -4,44 +4,14 @@
     :errorMessage="error"
     @close="emit('close', true)"
   >
-    <form class="flex flex-col gap-2" ref="formValidation">
-      <input
-        ref="titleInput"
-        type="text"
-        placeholder="Add a title"
-        class="bg-slate-100 p-1 text-lg"
-        v-model.trim="eventTitle"
-        required
-      />
-      <input
-        ref="dateInput"
-        type="date"
-        placeholder="Insert a date"
-        class="bg-slate-100 p-1"
-        v-model="eventDate"
-        required
-      />
-      <input
-        ref="startHourInput"
-        type="number"
-        min="0"
-        max="24"
-        placeholder="Insert a starting hour (0 - 23)"
-        class="bg-slate-100 p-1"
-        v-model="eventStartHour"
-        :onChange="onChange"
-        required
-      />
-      <input
-        ref="endHourInput"
-        type="number"
-        :min="eventStartHour"
-        max="24"
-        :placeholder="`Insert an ending hour (${eventStartHour ?? 0} - 23)`"
-        class="bg-slate-100 p-1"
-        v-model="eventEndHour"
-        required
-      />
+    <form class="flex flex-col gap-2" ref="formValidation" id="event-form">
+      <InputTitle v-model:title="eventTitle" ref="titleInput" />
+      <InputDate v-model:date.trim="eventDate" ref="dateInput" />
+      <div class="flex flex-row items-center justify-start gap-2">
+        <IconLoader name="Clock" :size="18" class="shrink-0 text-gray-400" />
+        <InputHour v-model:hour="eventStartHour" @update:hour="onChange" />
+        <InputHour v-model:hour="eventEndHour" :startHour="eventStartHour" />
+      </div>
     </form>
     <template #action>
       <Button
@@ -66,8 +36,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import ModalTemplate from '@/components/templates/ModalTemplate/ModalTemplate.vue';
+import ModalTemplate from '@/components/templates/ModalTemplate';
 import Button from '@/components/molecules/Button';
+import InputDate from '@/components/atoms/InputDate';
+import InputTitle from '@/components/atoms/InputTitle';
+import InputHour from '@/components/atoms/InputHour';
+import IconLoader from '@/components/atoms/IconLoader';
 import { useCalendarStore } from '@/stores/calendarStore';
 
 const { id, title, date, startHour, endHour } = defineProps<{
@@ -86,8 +60,8 @@ const emit = defineEmits<{
 
 const store = useCalendarStore();
 const findEvent = store.findWeekViewEvent;
-const titleInput = ref<HTMLInputElement | null>(null);
-const dateInput = ref<HTMLInputElement | null>(null);
+const titleInput = ref<typeof InputTitle | null>(null);
+const dateInput = ref<typeof InputDate | null>(null);
 const startHourInput = ref<HTMLInputElement | null>(null);
 const endHourInput = ref<HTMLInputElement | null>(null);
 const formValidation = ref<HTMLFormElement | null>(null);
@@ -111,8 +85,8 @@ onMounted(() => {
 });
 
 function onChange() {
-  if (eventEndHour.value! < eventStartHour.value!)
-    eventEndHour.value = eventStartHour.value;
+  if (eventStartHour.value && eventEndHour.value! <= eventStartHour.value!)
+    eventEndHour.value = eventStartHour.value + 1;
 }
 
 function addEvent() {
@@ -125,10 +99,10 @@ function addEvent() {
     );
 
     emit('close', true);
-  } else if (!titleInput.value?.checkValidity()) {
+  } else if (!titleInput.value?.titleRef.checkValidity()) {
     error.value = `Please add an event title`;
     return;
-  } else if (!dateInput.value?.checkValidity()) {
+  } else if (!dateInput.value?.dateRef.checkValidity()) {
     error.value = `Please add the event's date`;
     return;
   } else if (!startHourInput.value?.checkValidity()) {
@@ -150,10 +124,10 @@ function editEvent(id: string) {
     );
 
     emit('close', true);
-  } else if (!titleInput.value?.checkValidity()) {
+  } else if (!titleInput.value?.titleRef.checkValidity()) {
     error.value = `Please add an event title`;
     return;
-  } else if (!dateInput.value?.checkValidity()) {
+  } else if (!dateInput.value?.dateRef.checkValidity()) {
     error.value = `Please add the event's date`;
     return;
   } else if (!startHourInput.value?.checkValidity()) {
@@ -164,3 +138,30 @@ function editEvent(id: string) {
   }
 }
 </script>
+
+<style>
+.title-input:focus::before {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 50px;
+  background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
+  background-size: 300% 300%;
+  animation: gradient-animation 4s ease-in-out infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 15% 0%;
+  }
+  50% {
+    background-position: 85% 100%;
+  }
+  100% {
+    background-position: 15% 0%;
+  }
+}
+</style>
