@@ -4,30 +4,31 @@
       id="modal"
       :open="show"
       ref="trapRef"
-      class="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center"
+      class="absolute left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center"
       @keydown.esc.exact="closeModal"
       @click.self="closeModal"
     >
-      <div
-        class="relative flex w-1/3 flex-col gap-8 rounded-lg bg-slate-100 p-4"
-        ref="modalContainer"
-      >
-        <p
-          v-if="errorMessage"
-          class="absolute -top-10 left-0 w-full rounded-xl bg-[#f5a278] p-1 text-center text-white"
-        >
-          {{ errorMessage }}
-        </p>
-        <slot />
-        <hr />
-        <div class="flex justify-end gap-8 align-bottom">
-          <Button
-            class="rounded-lg bg-slate-100 px-6 py-2 font-bold text-black active:translate-y-[1px]"
-            @click.prevent="closeModal"
-            >Close</Button
+      <div class="w-1/3 rounded-xl bg-slate-100">
+        <header class="relative h-10 w-full rounded-t-xl bg-[#f5e178]">
+          <p
+            v-if="errorMessage"
+            class="absolute -top-10 left-0 w-full rounded-md bg-[#f5788d] p-1 text-center text-white"
           >
-          <slot name="action" />
-        </div>
+            {{ errorMessage }}
+          </p>
+        </header>
+        <main class="flex w-full flex-col gap-8 p-4" ref="modalContainer">
+          <slot />
+          <hr />
+          <div class="flex justify-end gap-8 align-bottom">
+            <Button
+              class="rounded-lg bg-slate-100 px-6 py-2 font-bold text-black active:translate-y-[1px]"
+              @click.prevent="closeModal"
+              >Close</Button
+            >
+            <slot name="action" />
+          </div>
+        </main>
       </div>
     </dialog>
   </Teleport>
@@ -89,8 +90,34 @@ onMounted(() => {
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.15);
 }
 
-#modal > div,
-#modal p {
-  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.25);
+#modal > div {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+#modal header > p::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
+  background-size: 300% 300%;
+  z-index: -1;
+  animation: gradient-animation 4s ease-in-out infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 15% 0%;
+  }
+  50% {
+    background-position: 85% 100%;
+  }
+  100% {
+    background-position: 15% 0%;
+  }
 }
 </style>
