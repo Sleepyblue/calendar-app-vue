@@ -5,12 +5,21 @@
     @close="emit('close', true)"
   >
     <form class="flex flex-col gap-2" ref="formValidation" id="event-form">
-      <InputTitle v-model:title="eventTitle" ref="titleInput" />
-      <InputDate v-model:date.trim="eventDate" ref="dateInput" />
+      <InputTitle ref="titleInput" v-model:title="eventTitle" />
+      <InputDate ref="dateInput" v-model:date.trim="eventDate" />
       <div class="flex flex-row items-center justify-start gap-2">
         <IconLoader name="Clock" :size="18" class="shrink-0 text-gray-400" />
-        <InputHour v-model:hour="eventStartHour" @update:hour="onChange" />
-        <InputHour v-model:hour="eventEndHour" :startHour="eventStartHour" />
+        <InputHour
+          ref="startHourInput"
+          v-model:startHour="eventStartHour"
+          @update:startHour="onStartChange"
+        />
+        <InputHour
+          ref="endHourInput"
+          v-model:endHour="eventEndHour"
+          @update:endHour="onEndChange"
+          :minHour="eventStartHour || 0"
+        />
       </div>
     </form>
     <template #action>
@@ -62,15 +71,15 @@ const store = useCalendarStore();
 const findEvent = store.findWeekViewEvent;
 const titleInput = ref<typeof InputTitle | null>(null);
 const dateInput = ref<typeof InputDate | null>(null);
-const startHourInput = ref<HTMLInputElement | null>(null);
-const endHourInput = ref<HTMLInputElement | null>(null);
+const startHourInput = ref<typeof InputHour | null>(null);
+const endHourInput = ref<typeof InputHour | null>(null);
 const formValidation = ref<HTMLFormElement | null>(null);
 
 const error = ref('');
 const eventTitle = ref(title || '');
 const eventDate = ref(date || '');
 const eventStartHour = ref(startHour);
-const eventEndHour = ref(endHour);
+const eventEndHour = ref(endHour || 0);
 
 onMounted(() => {
   if (id) {
@@ -84,9 +93,15 @@ onMounted(() => {
   }
 });
 
-function onChange() {
-  if (eventStartHour.value && eventEndHour.value! <= eventStartHour.value!)
+function onStartChange() {
+  if (eventStartHour.value && eventEndHour.value! <= eventStartHour.value!) {
     eventEndHour.value = eventStartHour.value + 1;
+  }
+}
+
+function onEndChange(value: number) {
+  if (eventEndHour.value === eventStartHour.value) return;
+  else eventEndHour.value = value;
 }
 
 function addEvent() {
@@ -95,7 +110,7 @@ function addEvent() {
       eventTitle.value,
       eventDate.value,
       eventStartHour.value!,
-      eventEndHour.value!
+      eventEndHour.value!,
     );
 
     emit('close', true);
@@ -105,10 +120,10 @@ function addEvent() {
   } else if (!dateInput.value?.dateRef.checkValidity()) {
     error.value = `Please add the event's date`;
     return;
-  } else if (!startHourInput.value?.checkValidity()) {
+  } else if (!startHourInput.value?.hourRef.checkValidity()) {
     error.value = `Please add an hour between 0 and 24`;
     return;
-  } else if (!endHourInput.value?.checkValidity()) {
+  } else if (!endHourInput.value?.hourRef.checkValidity()) {
     error.value = `Please add an hour between ${eventStartHour.value} and 24`;
   }
 }
@@ -120,7 +135,7 @@ function editEvent(id: string) {
       eventTitle.value,
       eventDate.value,
       eventStartHour.value!,
-      eventEndHour.value!
+      eventEndHour.value!,
     );
 
     emit('close', true);
@@ -130,38 +145,11 @@ function editEvent(id: string) {
   } else if (!dateInput.value?.dateRef.checkValidity()) {
     error.value = `Please add the event's date`;
     return;
-  } else if (!startHourInput.value?.checkValidity()) {
+  } else if (!startHourInput.value?.hourRef.checkValidity()) {
     error.value = `Please add an hour between 1 and 24`;
     return;
-  } else if (!endHourInput.value?.checkValidity()) {
+  } else if (!endHourInput.value?.hourRef.checkValidity()) {
     error.value = `Please add an hour between ${eventStartHour.value} and 24`;
   }
 }
 </script>
-
-<style>
-.title-input:focus::before {
-  content: '';
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  border-radius: 50px;
-  background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
-  background-size: 300% 300%;
-  animation: gradient-animation 4s ease-in-out infinite;
-}
-
-@keyframes gradient-animation {
-  0% {
-    background-position: 15% 0%;
-  }
-  50% {
-    background-position: 85% 100%;
-  }
-  100% {
-    background-position: 15% 0%;
-  }
-}
-</style>
