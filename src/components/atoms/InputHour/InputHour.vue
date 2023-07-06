@@ -8,7 +8,7 @@
       :max="!minHour ? 23 : 24"
       :placeholder="placeholder"
       class="hour-input w-full rounded-t-md bg-slate-100 p-1 outline-none focus:bg-slate-200"
-      :value="hour || currentHour"
+      :value="hour"
       @input="handleEmit($event)"
       @focusout="focusOut"
       required
@@ -40,6 +40,7 @@ const { startHour, endHour, minHour } = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:startHour', value: number): void;
+  (e: 'update:endHour', value: number): void;
 }>();
 
 const hourRef = ref<HTMLInputElement | null>(null);
@@ -47,12 +48,19 @@ const focus = ref(false);
 const min = computed(() => {
   if (minHour) {
     return minHour + 1;
+  } else if (minHour === 0 && endHour) {
+    return 1;
   }
 });
 
 const hour = computed(() => {
-  if (startHour) return startHour;
-  else return endHour;
+  if (startHour) {
+    return startHour;
+  } else if (startHour !== undefined && startHour < 1) {
+    return 0;
+  } else if (endHour) {
+    return endHour;
+  } else return currentHour.value;
 });
 
 const placeholder = computed(() => {
@@ -62,14 +70,16 @@ const placeholder = computed(() => {
 
 const currentHour = computed(() => {
   if (!startHour && minHour === undefined) {
+    emit('update:startHour', getCurrentHour('start'));
     return getCurrentHour('start');
   } else {
+    emit('update:endHour', getCurrentHour('end'));
     return getCurrentHour('end');
   }
 });
 
 const formatHour = computed(() => {
-  if (hour.value) {
+  if (hour.value || hour.value === 0) {
     return formatHour12(hour.value);
   } else if (!startHour && minHour === undefined) {
     return getCurrentFormattedHour('start');
@@ -89,6 +99,7 @@ function focusOut() {
 function handleEmit(event: Event) {
   const target = event.target as HTMLInputElement;
   emit('update:startHour', +target.value);
+  emit('update:endHour', +target.value);
 }
 
 onUpdated(() => {
