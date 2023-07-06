@@ -60,9 +60,7 @@ function closeModal() {
 
 onMounted(() => {
   // would be good to be dynamic
-  modalContainer.value
-    ?.querySelector<HTMLElement>('form > :nth-child(1)')
-    ?.focus();
+  modalContainer.value?.querySelector<HTMLElement>('#modal input')?.focus();
 });
 </script>
 
