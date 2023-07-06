@@ -9,8 +9,14 @@
       <InputDate v-model:date.trim="eventDate" ref="dateInput" />
       <div class="flex flex-row items-center justify-start gap-2">
         <IconLoader name="Clock" :size="18" class="shrink-0 text-gray-400" />
-        <InputHour v-model:hour="eventStartHour" @update:hour="onChange" />
-        <InputHour v-model:hour="eventEndHour" :startHour="eventStartHour" />
+        <InputHour
+          v-model:startHour="eventStartHour"
+          @update:startHour="onChange"
+        />
+        <InputHour
+          v-model:endHour="eventEndHour"
+          :minHour="eventStartHour || 0"
+        />
       </div>
     </form>
     <template #action>
@@ -70,7 +76,7 @@ const error = ref('');
 const eventTitle = ref(title || '');
 const eventDate = ref(date || '');
 const eventStartHour = ref(startHour);
-const eventEndHour = ref(endHour);
+const eventEndHour = ref(endHour || 0);
 
 onMounted(() => {
   if (id) {
@@ -85,8 +91,9 @@ onMounted(() => {
 });
 
 function onChange() {
-  if (eventStartHour.value && eventEndHour.value! <= eventStartHour.value!)
+  if (eventStartHour.value && eventEndHour.value! <= eventStartHour.value!) {
     eventEndHour.value = eventStartHour.value + 1;
+  }
 }
 
 function addEvent() {
@@ -95,7 +102,7 @@ function addEvent() {
       eventTitle.value,
       eventDate.value,
       eventStartHour.value!,
-      eventEndHour.value!
+      eventEndHour.value!,
     );
 
     emit('close', true);
@@ -120,7 +127,7 @@ function editEvent(id: string) {
       eventTitle.value,
       eventDate.value,
       eventStartHour.value!,
-      eventEndHour.value!
+      eventEndHour.value!,
     );
 
     emit('close', true);
@@ -138,30 +145,3 @@ function editEvent(id: string) {
   }
 }
 </script>
-
-<style>
-.title-input:focus::before {
-  content: '';
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  border-radius: 50px;
-  background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
-  background-size: 300% 300%;
-  animation: gradient-animation 4s ease-in-out infinite;
-}
-
-@keyframes gradient-animation {
-  0% {
-    background-position: 15% 0%;
-  }
-  50% {
-    background-position: 85% 100%;
-  }
-  100% {
-    background-position: 15% 0%;
-  }
-}
-</style>
