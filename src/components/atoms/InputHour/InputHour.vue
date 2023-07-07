@@ -1,5 +1,9 @@
 <template>
-  <label for="" class="hour-label relative w-full">
+  <label
+    for=""
+    class="hour-label relative w-full"
+    :class="{ 'mb-2 border-[3px] border-[#f5788d] rounded-lg pl-1': error }"
+  >
     <input
       v-if="focus"
       ref="hourRef"
@@ -10,6 +14,7 @@
       class="hour-input w-full rounded-t-md bg-slate-100 p-1 outline-none focus:bg-slate-200"
       :value="hour"
       @input="handleEmit($event)"
+      @change="isFieldValid(hour)"
       @focusout="focusOut"
       required
     />
@@ -21,6 +26,9 @@
       :value="formatHour"
       @focusin="focusIn"
     />
+    <p v-if="error" class="absolute -bottom-5 left-0 text-xs text-[#f5788d]">
+      Enter a value from 0 to 24
+    </p>
   </label>
 </template>
 
@@ -41,10 +49,13 @@ const { startHour, endHour, minHour } = defineProps<{
 const emit = defineEmits<{
   (e: 'update:startHour', value: number): void;
   (e: 'update:endHour', value: number): void;
+  (e: 'invalidField', value: boolean): void;
 }>();
 
 const hourRef = ref<HTMLInputElement | null>(null);
 const focus = ref(false);
+const error = ref(false);
+
 const min = computed(() => {
   if (minHour) {
     return minHour + 1;
@@ -79,6 +90,8 @@ const currentHour = computed(() => {
 });
 
 const formatHour = computed(() => {
+  if (error.value) return 'Invalid Hour';
+
   if (hour.value || hour.value === 0) {
     return formatHour12(hour.value);
   } else if (!startHour && minHour === undefined) {
@@ -96,6 +109,16 @@ function focusOut() {
   focus.value = false;
 }
 
+function isFieldValid(hour: number) {
+  if (hour <= 0 || hour >= 24) {
+    error.value = true;
+  } else {
+    error.value = false;
+  }
+
+  emit('invalidField', error.value);
+}
+
 function handleEmit(event: Event) {
   const target = event.target as HTMLInputElement;
   emit('update:startHour', +target.value);
@@ -104,10 +127,6 @@ function handleEmit(event: Event) {
 
 onUpdated(() => {
   hourRef.value?.focus();
-});
-
-defineExpose({
-  hourRef,
 });
 </script>
 

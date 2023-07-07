@@ -2,6 +2,7 @@
   <label
     for=""
     class="title-label relative flex items-center justify-start gap-2"
+    :class="{ 'mb-2 border-[3px] border-[#f5788d] rounded-lg pl-1': error }"
   >
     <IconLoader name="Title" :size="18" class="shrink-0 text-gray-400" />
     <input
@@ -11,8 +12,13 @@
       class="title-input w-full rounded-t-md bg-slate-100 p-1 outline-none focus:bg-slate-200"
       :value="title"
       @input="handleEmit($event)"
+      @focusout="isFieldValid"
+      @change="isFieldValid"
       required
     />
+    <p v-if="error" class="absolute -bottom-5 left-0 text-xs text-[#f5788d]">
+      Please, enter a title
+    </p>
   </label>
 </template>
 
@@ -20,24 +26,31 @@
 import { ref } from 'vue';
 import IconLoader from '@/components/atoms/IconLoader';
 
-defineProps<{
+const { title } = defineProps<{
   title: string;
 }>();
 
 const emit = defineEmits<{
   (e: 'update:title', value: string): void;
+  (e: 'invalidField', value: boolean): void;
 }>();
 
-const titleRef = ref<HTMLInputElement | null>(null);
+const error = ref(false);
+
+function isFieldValid() {
+  if (title === '') {
+    error.value = true;
+  } else {
+    error.value = false;
+  }
+
+  emit('invalidField', error.value);
+}
 
 function handleEmit(event: Event) {
   const target = event.target as HTMLInputElement;
   emit('update:title', target.value);
 }
-
-defineExpose({
-  titleRef,
-});
 </script>
 
 <style>

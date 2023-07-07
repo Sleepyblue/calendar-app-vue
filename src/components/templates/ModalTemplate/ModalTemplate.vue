@@ -9,14 +9,8 @@
       @click.self="closeModal"
     >
       <div class="w-1/3 rounded-xl bg-slate-100">
-        <header class="relative h-10 w-full rounded-t-xl bg-[#f5e178]">
-          <p
-            v-if="errorMessage"
-            class="absolute -top-10 left-0 w-full rounded-md bg-[#f5788d] p-1 text-center text-white"
-          >
-            {{ errorMessage }}
-          </p>
-        </header>
+        <header class="relative h-10 w-full rounded-t-xl bg-[#f5e178]" />
+
         <main class="flex w-full flex-col gap-8 p-4" ref="modalContainer">
           <slot />
           <hr />
@@ -39,7 +33,7 @@ import { onMounted, ref } from 'vue';
 import useFocusTrap from '@/composables/useFocusTrap';
 import Button from '@/components/molecules/Button';
 
-const { show, errorMessage } = defineProps<{
+const { show } = defineProps<{
   show: boolean;
   errorMessage?: string;
   attachTo?: string;
@@ -118,6 +112,10 @@ onMounted(() => {
 #modal button:hover::after {
   background-color: #f5e178;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.15);
+}
+
+#modal button:disabled::after {
+  background-color: theme('backgroundColor.slate.200');
 }
 
 #modal header > p::before,
