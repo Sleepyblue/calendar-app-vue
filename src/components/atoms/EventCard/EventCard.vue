@@ -41,11 +41,11 @@ const startHourFix = computed(() => eventStartHour + 1);
 const endHourFix = computed(() => eventEndHour + 1);
 
 const hourRange = computed(() =>
-  formatHoursRange(eventStartHour, eventEndHour, true)
+  formatHoursRange(eventStartHour, eventEndHour, true),
 );
 
 const isShort = computed(() =>
-  eventEndHour - eventStartHour < 2 ? true : false
+  eventEndHour - eventStartHour < 2 ? true : false,
 );
 
 function handleEventCardClick(e: MouseEvent) {

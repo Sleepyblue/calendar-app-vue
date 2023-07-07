@@ -6,7 +6,7 @@
       ref="dateInput"
       type="date"
       placeholder="Insert a date"
-      class="date-input tex-md relative w-full rounded-md bg-slate-100 p-1 outline-none focus:bg-slate-200"
+      class="date-input tex-md relative w-full rounded-t-md bg-slate-100 p-1 outline-none focus:bg-slate-200"
       :value="date"
       @input="handleEmit($event)"
       @focusout="focusOut"
@@ -16,7 +16,7 @@
       v-else
       type="text"
       placeholder="Insert a date"
-      class="text-md w-full border-b-2 border-b-transparent bg-slate-100 p-1 outline-none"
+      class="text-md w-full border-b-2 border-b-transparent bg-slate-100 p-1 outline-none rounded-t-md"
       :value="convertDateToShortForm(date)"
       @focusin="focusIn"
     />
