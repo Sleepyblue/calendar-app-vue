@@ -17,7 +17,7 @@
       v-else
       type="text"
       placeholder="Insert a date"
-      class="text-md w-full border-b-2 border-b-transparent bg-slate-100 p-1 outline-none"
+      class="text-md w-full border-b-2 border-b-transparent bg-slate-100 p-1 outline-none rounded-t-md"
       :value="formatHour"
       @focusin="focusIn"
     />
@@ -135,5 +135,10 @@ defineExpose({
   100% {
     background-position: 15% 0%;
   }
+}
+
+label > input:hover {
+  cursor: pointer;
+  background-color: rgba(245, 162, 120, 0.1);
 }
 </style>

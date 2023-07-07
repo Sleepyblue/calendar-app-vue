@@ -22,7 +22,7 @@
           <hr />
           <div class="flex justify-end gap-8 align-bottom">
             <Button
-              class="rounded-lg bg-slate-100 px-6 py-2 font-bold text-black active:translate-y-[1px]"
+              class="close relative rounded-lg bg-slate-100 px-6 py-2 font-bold text-black outline-none"
               @click.prevent="closeModal"
               >Close</Button
             >
@@ -76,29 +76,58 @@ onMounted(() => {
   backdrop-filter: blur(3px);
 }
 
-#modal button {
-  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.15);
-}
-
-#modal button:hover {
-  background-color: rgba(245, 162, 120, 0.4);
-}
-
-#modal button:active {
-  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.15);
-}
-
 #modal > div {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
-#modal header > p::before {
+#modal button {
+  /* Slight hack to place the element on the same stack as ::before/::after due to transform */
+  transform: rotate(0.001deg);
+}
+
+#modal button::after {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  width: calc(100% + 6px);
-  height: calc(100% + 6px);
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border-radius: 6px;
+}
+
+#modal button:active {
+  box-shadow: 0 0 1px 0px rgba(0, 0, 0, 0.15);
+  transform: translateY(1px);
+}
+
+#modal button:not(.close)::after {
+  background-color: #f5a278;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.15);
+}
+
+#modal button:not(.close):focus-visible::after {
+  background-color: #f5e178;
+}
+
+#modal button.close::after {
+  background-color: theme('backgroundColor.slate.100');
+}
+
+#modal button:hover::after {
+  background-color: #f5e178;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.15);
+}
+
+#modal header > p::before,
+#modal button:focus-visible::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
   transform: translate(-50%, -50%);
   border-radius: 8px;
   background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);

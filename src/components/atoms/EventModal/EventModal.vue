@@ -25,7 +25,7 @@
     <template #action>
       <Button
         v-if="edit"
-        class="rounded-lg bg-[#f5a278] px-6 py-2 font-bold text-white active:translate-y-[1px]"
+        class="relative rounded-lg px-6 py-2 font-bold text outline-none text-white hover:text-black focus-visible:text-black"
         type="submit"
         @click.prevent="editEvent(id as any)"
       >
@@ -33,7 +33,7 @@
       </Button>
       <Button
         v-else
-        class="rounded-lg bg-[#f5a278] px-6 py-2 font-bold text-white active:translate-y-[1px]"
+        class="relative rounded-lg px-6 py-2 font-bold text-white outline-none hover:text-black focus-visible:text-black"
         type="submit"
         @click.prevent="addEvent"
       >
