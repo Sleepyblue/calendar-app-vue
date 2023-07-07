@@ -1,12 +1,16 @@
 <template>
-  <ModalTemplate
-    :show="show"
-    :errorMessage="error"
-    @close="emit('close', true)"
-  >
-    <form class="flex flex-col gap-2" ref="formValidation" id="event-form">
-      <InputTitle ref="titleInput" v-model:title="eventTitle" />
-      <InputDate ref="dateInput" v-model:date.trim="eventDate" />
+  <ModalTemplate :show="show" @close="emit('close', true)">
+    <form class="flex flex-col gap-3" ref="formValidation" id="event-form">
+      <InputTitle
+        ref="titleInput"
+        v-model:title.trim="eventTitle"
+        @invalidField="errorCheck"
+      />
+      <InputDate
+        ref="dateInput"
+        v-model:date.trim="eventDate"
+        @invalidField="errorCheck"
+      />
       <div class="flex flex-row items-center justify-start gap-2">
         <IconLoader name="Clock" :size="18" class="shrink-0 text-gray-400" />
         <InputHour
@@ -28,6 +32,7 @@
         class="relative rounded-lg px-6 py-2 font-bold text outline-none text-white hover:text-black focus-visible:text-black"
         type="submit"
         @click.prevent="editEvent(id as any)"
+        :disabled="error"
       >
         Save
       </Button>
@@ -36,6 +41,7 @@
         class="relative rounded-lg px-6 py-2 font-bold text-white outline-none hover:text-black focus-visible:text-black"
         type="submit"
         @click.prevent="addEvent"
+        :disabled="error"
       >
         Create
       </Button>
@@ -69,13 +75,9 @@ const emit = defineEmits<{
 
 const store = useCalendarStore();
 const findEvent = store.findWeekViewEvent;
-const titleInput = ref<typeof InputTitle | null>(null);
-const dateInput = ref<typeof InputDate | null>(null);
-const startHourInput = ref<typeof InputHour | null>(null);
-const endHourInput = ref<typeof InputHour | null>(null);
 const formValidation = ref<HTMLFormElement | null>(null);
 
-const error = ref('');
+const error = ref(false);
 const eventTitle = ref(title || '');
 const eventDate = ref(date || '');
 const eventStartHour = ref(startHour);
@@ -104,6 +106,10 @@ function onEndChange(value: number) {
   else eventEndHour.value = value;
 }
 
+function errorCheck(status: boolean) {
+  error.value = status;
+}
+
 function addEvent() {
   if (formValidation.value?.checkValidity()) {
     store.addEvent(
@@ -114,17 +120,6 @@ function addEvent() {
     );
 
     emit('close', true);
-  } else if (!titleInput.value?.titleRef.checkValidity()) {
-    error.value = `Please add an event title`;
-    return;
-  } else if (!dateInput.value?.dateRef.checkValidity()) {
-    error.value = `Please add the event's date`;
-    return;
-  } else if (!startHourInput.value?.hourRef.checkValidity()) {
-    error.value = `Please add an hour between 0 and 24`;
-    return;
-  } else if (!endHourInput.value?.hourRef.checkValidity()) {
-    error.value = `Please add an hour between ${eventStartHour.value} and 24`;
   }
 }
 
@@ -139,17 +134,6 @@ function editEvent(id: string) {
     );
 
     emit('close', true);
-  } else if (!titleInput.value?.titleRef.checkValidity()) {
-    error.value = `Please add an event title`;
-    return;
-  } else if (!dateInput.value?.dateRef.checkValidity()) {
-    error.value = `Please add the event's date`;
-    return;
-  } else if (!startHourInput.value?.hourRef.checkValidity()) {
-    error.value = `Please add an hour between 1 and 24`;
-    return;
-  } else if (!endHourInput.value?.hourRef.checkValidity()) {
-    error.value = `Please add an hour between ${eventStartHour.value} and 24`;
   }
 }
 </script>
