@@ -8,17 +8,29 @@
 
 <br>
 
+___
+
+<br>
+
 ### <a id="playground">Playground<a/>
 Don't want to read all this?<br>
 Don't have the time?<br>
 That's perfectly fine! This section is at the top just for you 😁
 
 You can play with a live version by clicking the badge!  [![Netlify Status](https://api.netlify.com/api/v1/badges/f9a7f8d3-58ca-44ed-a038-ae8d2efd31a5/deploy-status)](https://calendarapp-vue.netlify.app/)
-``
+
+<br>
+
+___
+
 <br>
 
 ### <a id="heads-up">Heads up<a>
 >Please note that the project is currently under development and will surely have certain (a lot of 🥴) limitations. Check the [Pain Points](#pain-points) section for more information!
+
+<br>
+
+___
 
 <br>
 
@@ -27,6 +39,10 @@ Good question!
 The calendar application is being developed as a technical challenge to enhance my skills and explore the intricacies of building a robust web application from scratch. It also provides an opportunity to delve into user experience (UX) design principles and address the need for inclusive and user-friendly designs in calendar (and all) applications.
 
 I aim to focus on a solid keyboard navigation ensuring that those who rely (or want to) on keyboard navigation can effectively interact with every feature implemented on the calendar. 
+
+<br>
+
+___
 
 <br>
 
@@ -45,6 +61,10 @@ The current features of the calendar application include:
 
 <br>
 
+___
+
+<br>
+
 ### <a id="pain-points">Pain Points</a>
 Ouch!
 Let's talk about the elephant(s) on the room 😬
@@ -54,6 +74,10 @@ While progress has been made in developing the calendar application, some challe
 - 💻 Currently, the layout is **only** designed for desktop use not being yet optimized for mobile devices.
 - 💾 The application **does not have** a backend or utilizes `localStorage`, so refreshing the browser will invariably result in data loss.
 - 🧪 Testing is a *bit* behind at the moment. I know, I know, no excuses! 😵
+
+<br>
+
+___
 
 <br>
 
