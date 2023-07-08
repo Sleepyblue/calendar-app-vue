@@ -35,7 +35,7 @@ ___
 <br>
 
 ### <a id="why-another-calendar">Why a(nother) Calendar?</a>
-Good question!
+Good question!<br>
 The calendar application is being developed as a technical challenge to enhance my skills and explore the intricacies of building a robust web application from scratch. It also provides an opportunity to delve into user experience (UX) design principles and address the need for inclusive and user-friendly designs in calendar (and all) applications.
 
 I aim to focus on a solid keyboard navigation ensuring that those who rely (or want to) on keyboard navigation can effectively interact with every feature implemented on the calendar. 
@@ -66,7 +66,7 @@ ___
 <br>
 
 ### <a id="pain-points">Pain Points</a>
-Ouch!
+Ouch!<br>
 Let's talk about the elephant(s) on the room 😬
 
 While progress has been made in developing the calendar application, some challenges and limitations still exist:
@@ -81,7 +81,7 @@ ___
 
 <br>
 
-### <a id="did-the-project-interest-you">Did the project interest you?</a>``
+### <a id="did-the-project-interest-you">Did the project interest you?</a>
 Did you read all the way here? You have my appreciation! 🥳
 
 I value every input and welcome any suggestions or feedback I might get! Feel free to open an issue in the repository to share your thoughts, ideas, or any improvements you would like to suggest. There's no right or wrong suggestion - every perspective is *valuable!* Alternatively, you can also contact me directly by email if you prefer a more direct communication channel.
