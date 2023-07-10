@@ -11,7 +11,7 @@
       :min="min || 0"
       :max="!minHour ? 23 : 24"
       :placeholder="placeholder"
-      class="hour-input w-full rounded-t-md bg-slate-100 p-1 outline-none focus:bg-slate-200"
+      class="hour-input w-full rounded-t-md p-1 outline-none focus:bg-slate-200 bg-transparent"
       :value="hour"
       @input="handleEmit($event)"
       @change="isFieldValid(hour)"
@@ -22,7 +22,7 @@
       v-else
       type="text"
       placeholder="Insert a date"
-      class="text-md w-full border-b-2 border-b-transparent bg-slate-100 p-1 outline-none rounded-t-md"
+      class="text-md w-full border-b-2 border-b-transparent bg-transparent p-1 outline-none rounded-t-md"
       :value="formatHour"
       @focusin="focusIn"
     />
@@ -142,6 +142,10 @@ onUpdated(() => {
   background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
   background-size: 300% 300%;
   animation: gradient-animation 4s ease-in-out infinite;
+}
+
+.hour-label:has(.hour-input:focus + p)::before {
+  content: none;
 }
 
 @keyframes gradient-animation {
