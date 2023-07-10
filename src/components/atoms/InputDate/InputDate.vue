@@ -10,7 +10,7 @@
       ref="dateRef"
       type="date"
       placeholder="Insert a date"
-      class="date-input tex-md relative w-full rounded-t-md bg-slate-100 p-1 outline-none focus:bg-slate-200"
+      class="date-input tex-md relative w-full rounded-t-md bg-transparent p-1 outline-none focus:bg-slate-200"
       :value="date"
       @input="handleEmit($event)"
       @change="isFieldValid(date)"
@@ -21,7 +21,7 @@
       v-else
       type="text"
       placeholder="Insert a date"
-      class="text-md w-full border-b-2 border-b-transparent bg-slate-100 p-1 outline-none rounded-t-md"
+      class="text-md w-full border-b-2 border-b-transparent bg-transparent p-1 outline-none rounded-t-md"
       :value="convertDateToShortForm(date)"
       @focusin="focusIn"
     />
@@ -91,6 +91,10 @@ onUpdated(() => {
   background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
   background-size: 300% 300%;
   animation: gradient-animation 4s ease-in-out infinite;
+}
+
+label:has(p) .date-input:focus::before {
+  content: none;
 }
 
 @keyframes gradient-animation {
