@@ -1,16 +1,18 @@
 <template>
-  <label
-    for=""
-    class="relative flex items-center justify-start gap-2"
-    :class="{ 'mb-2 border-[3px] border-[#f5788d] rounded-lg pl-1': error }"
+  <InputTemplate
+    label="date"
+    iconName="Calendar"
+    :error="error"
+    errorMessage="Invalid date"
+    :focusRef="dateRef"
   >
-    <IconLoader name="Calendar" :size="18" class="shrink-0 text-gray-400" />
     <input
       v-if="focus"
       ref="dateRef"
       type="date"
+      name="date"
       placeholder="Insert a date"
-      class="date-input tex-md relative w-full rounded-t-md bg-transparent p-1 outline-none focus:bg-slate-200"
+      class="text-md w-full rounded-t-md bg-transparent p-1 outline-none focus:bg-slate-200"
       :value="date"
       @input="handleEmit($event)"
       @change="isFieldValid(date)"
@@ -25,15 +27,12 @@
       :value="convertDateToShortForm(date)"
       @focusin="focusIn"
     />
-    <p v-if="error" class="absolute -bottom-5 left-0 text-xs text-[#f5788d]">
-      Invalid date
-    </p>
-  </label>
+  </InputTemplate>
 </template>
 
 <script setup lang="ts">
-import { onUpdated, ref } from 'vue';
-import IconLoader from '@/components/atoms/IconLoader';
+import { ref } from 'vue';
+import InputTemplate from '@/components/templates/InputTemplate';
 import { convertDateToShortForm } from '@/utils/Dates';
 
 const { date } = defineProps<{
@@ -73,39 +72,4 @@ function focusIn() {
 function focusOut() {
   focus.value = false;
 }
-
-onUpdated(() => {
-  dateRef.value?.focus();
-});
 </script>
-
-<style>
-.date-input:focus::before {
-  content: '';
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  border-radius: 50px;
-  background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
-  background-size: 300% 300%;
-  animation: gradient-animation 4s ease-in-out infinite;
-}
-
-label:has(p) .date-input:focus::before {
-  content: none;
-}
-
-@keyframes gradient-animation {
-  0% {
-    background-position: 15% 0%;
-  }
-  50% {
-    background-position: 85% 100%;
-  }
-  100% {
-    background-position: 15% 0%;
-  }
-}
-</style>
