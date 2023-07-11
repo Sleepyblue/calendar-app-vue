@@ -1,7 +1,7 @@
 import { customRef } from 'vue';
 
 const focusableElementsSelector =
-  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 const useFocusTrap = () => {
   let focusableElements = [];
@@ -42,7 +42,7 @@ const useFocusTrap = () => {
     // Bail out if there is no value
     if (!trapRef.value) return;
     focusableElements = trapRef.value.querySelectorAll(
-      focusableElementsSelector
+      focusableElementsSelector,
     );
     $firstFocusable = focusableElements[0];
     $lastFocusable = focusableElements[focusableElements.length - 1];

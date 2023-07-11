@@ -1,8 +1,9 @@
 <template>
-  <label
-    for=""
-    class="hour-label relative w-full"
-    :class="{ 'mb-2 border-[3px] border-[#f5788d] rounded-lg pl-1': error }"
+  <InputTemplate
+    label="date"
+    :error="error"
+    errorMessage="Enter a value from 0 to 24"
+    :focusRef="hourRef"
   >
     <input
       v-if="focus"
@@ -26,14 +27,12 @@
       :value="formatHour"
       @focusin="focusIn"
     />
-    <p v-if="error" class="absolute -bottom-5 left-0 text-xs text-[#f5788d]">
-      Enter a value from 0 to 24
-    </p>
-  </label>
+  </InputTemplate>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onUpdated } from 'vue';
+import { ref, computed } from 'vue';
+import InputTemplate from '@/components/templates/InputTemplate';
 import {
   formatHour12,
   getCurrentHour,
@@ -124,44 +123,4 @@ function handleEmit(event: Event) {
   emit('update:startHour', +target.value);
   emit('update:endHour', +target.value);
 }
-
-onUpdated(() => {
-  hourRef.value?.focus();
-});
 </script>
-
-<style>
-.hour-label:has(.hour-input:focus)::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  border-radius: 50px;
-  background: linear-gradient(120deg, #f5788d, #f5e178, #f5788d);
-  background-size: 300% 300%;
-  animation: gradient-animation 4s ease-in-out infinite;
-}
-
-.hour-label:has(.hour-input:focus + p)::before {
-  content: none;
-}
-
-@keyframes gradient-animation {
-  0% {
-    background-position: 15% 0%;
-  }
-  50% {
-    background-position: 85% 100%;
-  }
-  100% {
-    background-position: 15% 0%;
-  }
-}
-
-label > input:hover {
-  cursor: pointer;
-  background-color: rgba(245, 162, 120, 0.1);
-}
-</style>
