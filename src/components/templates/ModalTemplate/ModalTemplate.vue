@@ -45,7 +45,7 @@ const emit = defineEmits<{
 }>();
 
 const modalContainer = ref<HTMLDivElement | null>(null);
-const { trapRef, clearFocusTrap } = useFocusTrap();
+const { trapRef, clearFocusTrap, initFocusTrap } = useFocusTrap();
 
 function closeModal() {
   clearFocusTrap();
