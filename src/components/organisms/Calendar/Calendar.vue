@@ -27,7 +27,7 @@
         :offsetWidth="offsetWidth"
         :horizontalPosition="horizontalPosition"
         :translate="translateY"
-        @close="show = false"
+        @close="handleClosePreview"
         @openEditModal="handleEditModal"
       />
       <EventModal
@@ -64,13 +64,15 @@ interface modalEmit {
   endHour: number;
 }
 
-const { isSidebarOpen, modalStatus } = defineProps<{
-  modalStatus?: boolean;
+const { isSidebarOpen, modalStatus, previewStatus } = defineProps<{
   isSidebarOpen: boolean;
+  modalStatus?: boolean;
+  previewStatus?: boolean;
 }>();
 
 const emit = defineEmits<{
   (e: 'update:modalStatus', value: boolean): void;
+  (e: 'update:previewStatus', value: boolean): void;
 }>();
 
 const store = useCalendarStore();
@@ -100,6 +102,11 @@ function handleEditModal(eventId: string) {
 function handleCloseModal() {
   emit('update:modalStatus', false);
   showModal.value = false;
+}
+
+function handleClosePreview() {
+  emit('update:previewStatus', false);
+  show.value = false;
 }
 
 function handleModal(emitted: modalEmit) {
@@ -172,7 +179,10 @@ function handleDisplayCard(e?: MouseEvent) {
 
     horizontalPosition.value = verdict;
 
-    if (!show.value) show.value = true;
+    if (!show.value) {
+      show.value = true;
+      emit('update:previewStatus', true);
+    }
   }, 450);
 }
 
@@ -214,7 +224,7 @@ watch(
   },
 );
 
-// TODO: Add this into a single watcher
+// TODO: Add these into a single watcher
 watch(
   () => modalStatus,
   () => {
@@ -224,6 +234,14 @@ watch(
       endHour.value = undefined;
       showModal.value = true;
     }
+  },
+);
+
+watch(
+  () => previewStatus,
+  () => {
+    if (previewStatus) show.value = true;
+    else show.value = previewStatus;
   },
 );
 </script>

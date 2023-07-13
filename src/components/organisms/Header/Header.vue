@@ -32,6 +32,7 @@ import { moveWeekBack, moveWeekForward } from '@/utils/Dates';
 
 const emit = defineEmits<{
   (e: 'modalStatus', value: boolean): void;
+  (e: 'previewStatus', value: boolean): void;
 }>();
 
 const store = useCalendarStore();
@@ -46,10 +47,12 @@ let month = computed(() => {
 });
 
 function moveForward() {
+  emit('previewStatus', false);
   updateView(moveWeekForward(store.weekDates!));
 }
 
 function moveBackwards() {
+  emit('previewStatus', false);
   updateView(moveWeekBack(store.weekDates!));
 }
 

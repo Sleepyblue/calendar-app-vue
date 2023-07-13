@@ -9,11 +9,16 @@
       id="view"
       class="relative m-3 flex flex-col gap-4 overflow-hidden rounded-lg bg-slate-100"
     >
-      <Header @modalStatus="handleHeaderModal" />
+      <Header
+        @modalStatus="handleHeaderModal"
+        @previewStatus="handleHeaderPreview"
+      />
       <Calendar
         :isSidebarOpen="sidebarOpen"
         :modalStatus="modalOpen"
+        :previewStatus="previewOpen"
         @update:modalStatus="handleHeaderModal"
+        @update:previewStatus="handleHeaderPreview"
       />
       <Button class="absolute left-1 top-1 h-6 w-6" @click="sidebarToggle()">
         <IconLoader v-if="sidebarOpen" name="SidebarCollapse" />
@@ -33,6 +38,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 
 const sidebarOpen = ref(false);
 const modalOpen = ref(false);
+const previewOpen = ref(false);
 
 function sidebarToggle() {
   sidebarOpen.value = !sidebarOpen.value;
@@ -40,6 +46,10 @@ function sidebarToggle() {
 
 function handleHeaderModal(value: boolean) {
   modalOpen.value = value;
+}
+
+function handleHeaderPreview(value: boolean) {
+  previewOpen.value = value;
 }
 
 //////////////////////
