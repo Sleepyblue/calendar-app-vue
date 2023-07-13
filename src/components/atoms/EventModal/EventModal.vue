@@ -17,12 +17,14 @@
           ref="startHourInput"
           v-model:startHour="eventStartHour"
           @update:startHour="onStartChange"
+          @invalidField="errorCheck"
         />
         <InputHour
           ref="endHourInput"
           v-model:endHour="eventEndHour"
           @update:endHour="onEndChange"
           :minHour="eventStartHour || 0"
+          @invalidField="errorCheck"
         />
       </div>
     </form>
@@ -50,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import ModalTemplate from '@/components/templates/ModalTemplate';
 import Button from '@/components/molecules/Button';
 import InputDate from '@/components/atoms/InputDate';
@@ -82,6 +84,12 @@ const eventTitle = ref(title || '');
 const eventDate = ref(date || '');
 const eventStartHour = ref(startHour);
 const eventEndHour = ref(endHour || 0);
+const errorObject = reactive({
+  title: false,
+  date: false,
+  startHour: false,
+  endHour: false,
+});
 
 onMounted(() => {
   if (id) {
@@ -106,8 +114,16 @@ function onEndChange(value: number) {
   else eventEndHour.value = value;
 }
 
-function errorCheck(status: boolean) {
-  error.value = status;
+function errorCheck(
+  value: Partial<{ [key in keyof typeof errorObject]: boolean }>,
+) {
+  const obKey = Object.keys(value)[0] as keyof typeof errorObject;
+  const keyValue: boolean = Object.values(value)[0];
+
+  errorObject[obKey] = keyValue;
+
+  if (Object.values(errorObject).some((value) => value)) error.value = true;
+  else error.value = false;
 }
 
 function addEvent() {
