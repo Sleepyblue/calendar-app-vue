@@ -27,7 +27,7 @@
         :offsetWidth="offsetWidth"
         :horizontalPosition="horizontalPosition"
         :translate="translateY"
-        @close="show = false"
+        @close="handleClosePreview"
         @openEditModal="handleEditModal"
       />
       <EventModal
@@ -38,7 +38,7 @@
         :date="date"
         :startHour="startHour"
         :endHour="endHour"
-        @close="showModal = false"
+        @close="handleCloseModal"
       />
     </main>
   </div>
@@ -52,8 +52,11 @@ import CalendarHeader from '@/components/molecules/CalendarHeader';
 import EventDisplay from '@/components/atoms/EventDisplay';
 import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
-import { convertWeekDatesToStrings } from '@/utils/Dates';
-import { convertDateToShorthand } from '@/utils/Dates';
+import {
+  convertWeekDatesToStrings,
+  convertDateToShorthand,
+  getCurrentDate,
+} from '@/utils/Dates';
 
 interface modalEmit {
   event: MouseEvent;
@@ -61,8 +64,15 @@ interface modalEmit {
   endHour: number;
 }
 
-const { isSidebarOpen } = defineProps<{
+const { isSidebarOpen, modalStatus, previewStatus } = defineProps<{
   isSidebarOpen: boolean;
+  modalStatus?: boolean;
+  previewStatus?: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:modalStatus', value: boolean): void;
+  (e: 'update:previewStatus', value: boolean): void;
 }>();
 
 const store = useCalendarStore();
@@ -80,13 +90,23 @@ const horizontalPosition = ref('');
 const translateY = ref(false);
 const id = ref();
 const date = ref();
-const startHour = ref(0);
-const endHour = ref(0);
+const startHour = ref<number | undefined>(0);
+const endHour = ref<number | undefined>(0);
 
 function handleEditModal(eventId: string) {
   id.value = eventId;
   showEditModal.value = true;
   showModal.value = true;
+}
+
+function handleCloseModal() {
+  emit('update:modalStatus', false);
+  showModal.value = false;
+}
+
+function handleClosePreview() {
+  emit('update:previewStatus', false);
+  show.value = false;
 }
 
 function handleModal(emitted: modalEmit) {
@@ -159,7 +179,10 @@ function handleDisplayCard(e?: MouseEvent) {
 
     horizontalPosition.value = verdict;
 
-    if (!show.value) show.value = true;
+    if (!show.value) {
+      show.value = true;
+      emit('update:previewStatus', true);
+    }
   }, 450);
 }
 
@@ -198,7 +221,28 @@ watch(
     setTimeout(() => {
       handlePositionUpdate();
     }, 300);
-  }
+  },
+);
+
+// TODO: Add these into a single watcher
+watch(
+  () => modalStatus,
+  () => {
+    if (modalStatus) {
+      date.value = getCurrentDate();
+      startHour.value = undefined;
+      endHour.value = undefined;
+      showModal.value = true;
+    }
+  },
+);
+
+watch(
+  () => previewStatus,
+  () => {
+    if (previewStatus) show.value = true;
+    else show.value = previewStatus;
+  },
 );
 </script>
 
