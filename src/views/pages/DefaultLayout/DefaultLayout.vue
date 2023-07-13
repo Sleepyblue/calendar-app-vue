@@ -9,8 +9,12 @@
       id="view"
       class="relative m-3 flex flex-col gap-4 overflow-hidden rounded-lg bg-slate-100"
     >
-      <Header />
-      <Calendar :isSidebarOpen="sidebarOpen" />
+      <Header @modalStatus="handleHeaderModal" />
+      <Calendar
+        :isSidebarOpen="sidebarOpen"
+        :modalStatus="modalOpen"
+        @update:modalStatus="handleHeaderModal"
+      />
       <Button class="absolute left-1 top-1 h-6 w-6" @click="sidebarToggle()">
         <IconLoader v-if="sidebarOpen" name="SidebarCollapse" />
         <IconLoader v-else name="SidebarExpand" />
@@ -28,9 +32,14 @@ import IconLoader from '@/components/atoms/IconLoader';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const sidebarOpen = ref(false);
+const modalOpen = ref(false);
 
 function sidebarToggle() {
   sidebarOpen.value = !sidebarOpen.value;
+}
+
+function handleHeaderModal(value: boolean) {
+  modalOpen.value = value;
 }
 
 //////////////////////

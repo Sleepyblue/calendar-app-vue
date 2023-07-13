@@ -38,7 +38,7 @@
         :date="date"
         :startHour="startHour"
         :endHour="endHour"
-        @close="showModal = false"
+        @close="handleCloseModal"
       />
     </main>
   </div>
@@ -52,8 +52,11 @@ import CalendarHeader from '@/components/molecules/CalendarHeader';
 import EventDisplay from '@/components/atoms/EventDisplay';
 import EventModal from '@/components/atoms/EventModal';
 import { useCalendarStore } from '@/stores/calendarStore';
-import { convertWeekDatesToStrings } from '@/utils/Dates';
-import { convertDateToShorthand } from '@/utils/Dates';
+import {
+  convertWeekDatesToStrings,
+  convertDateToShorthand,
+  getCurrentDate,
+} from '@/utils/Dates';
 
 interface modalEmit {
   event: MouseEvent;
@@ -61,8 +64,13 @@ interface modalEmit {
   endHour: number;
 }
 
-const { isSidebarOpen } = defineProps<{
+const { isSidebarOpen, modalStatus } = defineProps<{
+  modalStatus?: boolean;
   isSidebarOpen: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:modalStatus', value: boolean): void;
 }>();
 
 const store = useCalendarStore();
@@ -80,13 +88,18 @@ const horizontalPosition = ref('');
 const translateY = ref(false);
 const id = ref();
 const date = ref();
-const startHour = ref(0);
-const endHour = ref(0);
+const startHour = ref<number | undefined>(0);
+const endHour = ref<number | undefined>(0);
 
 function handleEditModal(eventId: string) {
   id.value = eventId;
   showEditModal.value = true;
   showModal.value = true;
+}
+
+function handleCloseModal() {
+  emit('update:modalStatus', false);
+  showModal.value = false;
 }
 
 function handleModal(emitted: modalEmit) {
@@ -198,7 +211,20 @@ watch(
     setTimeout(() => {
       handlePositionUpdate();
     }, 300);
-  }
+  },
+);
+
+// TODO: Add this into a single watcher
+watch(
+  () => modalStatus,
+  () => {
+    if (modalStatus) {
+      date.value = getCurrentDate();
+      startHour.value = undefined;
+      endHour.value = undefined;
+      showModal.value = true;
+    }
+  },
 );
 </script>
 
