@@ -48,7 +48,8 @@ const { startHour, endHour, minHour } = defineProps<{
 const emit = defineEmits<{
   (e: 'update:startHour', value: number): void;
   (e: 'update:endHour', value: number): void;
-  (e: 'invalidField', value: boolean): void;
+  (e: 'invalidField', value: { startHour: boolean }): void;
+  (e: 'invalidField', value: { endHour: boolean }): void;
 }>();
 
 const hourRef = ref<HTMLInputElement | null>(null);
@@ -115,7 +116,13 @@ function isFieldValid(hour: number) {
     error.value = false;
   }
 
-  emit('invalidField', error.value);
+  if (startHour) {
+    emit('invalidField', { startHour: error.value });
+  }
+
+  if (endHour) {
+    emit('invalidField', { endHour: error.value });
+  }
 }
 
 function handleEmit(event: Event) {

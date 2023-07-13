@@ -41,7 +41,7 @@ const { date } = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:date', value: string): void;
-  (e: 'invalidField', value: boolean): void;
+  (e: 'invalidField', value: { date: boolean }): void;
 }>();
 
 const focus = ref(false);
@@ -57,7 +57,7 @@ function isFieldValid(date: string) {
     error.value = false;
   }
 
-  emit('invalidField', error.value);
+  emit('invalidField', { date: error.value });
 }
 
 function handleEmit(event: Event) {

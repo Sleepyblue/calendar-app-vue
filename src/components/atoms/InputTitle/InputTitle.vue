@@ -30,7 +30,7 @@ const { title } = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:title', value: string): void;
-  (e: 'invalidField', value: boolean): void;
+  (e: 'invalidField', value: { title: boolean }): void;
 }>();
 
 const error = ref(false);
@@ -42,7 +42,7 @@ function isFieldValid() {
     error.value = false;
   }
 
-  emit('invalidField', error.value);
+  emit('invalidField', { title: error.value });
 }
 
 function handleEmit(event: Event) {
