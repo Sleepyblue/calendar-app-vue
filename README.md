@@ -17,6 +17,8 @@ Don't want to read all this?<br>
 Don't have the time?<br>
 That's perfectly fine! This section is at the top just for you 😁
 
+<br>
+
 You can play with a live version by clicking the badge!  [![Netlify Status](https://api.netlify.com/api/v1/badges/f9a7f8d3-58ca-44ed-a038-ae8d2efd31a5/deploy-status)](https://calendarapp-vue.netlify.app/)
 
 <br>
@@ -26,7 +28,9 @@ ___
 <br>
 
 ### <a id="heads-up">Heads up<a>
->Please note that the project is currently under development and will surely have certain (a lot of 🥴) limitations. Check the [Pain Points](#pain-points) section for more information!
+1. > Please note that the project is currently under development and will surely have certain (a lot of 🥴) limitations. Check the [Pain Points](#pain-points) section for more information!
+
+2. > I adopted using reactive props destructure, which is an experimental feature. Check the RFC at https://github.com/vuejs/rfcs/discussions/502 for more information on it.
 
 <br>
 
@@ -38,7 +42,7 @@ ___
 Good question!<br>
 The calendar application is being developed as a technical challenge to enhance my skills and explore the intricacies of building a robust web application from scratch. It also provides an opportunity to delve into user experience (UX) design principles and address the need for inclusive and user-friendly designs in calendar (and all) applications.
 
-I aim to focus on a solid keyboard navigation ensuring that those who rely (or want to) on keyboard navigation can effectively interact with every feature implemented on the calendar. 
+I aim to focus on a solid keyboard navigation ensuring that those who rely on keyboard navigation (or want to) can effectively interact with every feature implemented on the calendar. 
 
 <br>
 
@@ -52,12 +56,12 @@ ___
 The current features of the calendar application include:
 - *Event Creation:* Events can be created in the following manner:
 	- Clicking on a specific hour;
-	- Using the *click & drag* functionality
-	- Using the dedicated *"Add Event"* button
-- *Event Deletion:* Events can be deleted by choosing the target event and clicking on the *trash* icon present on the preview
+	- Using the *click & drag* functionality;
+	- Using the dedicated *"Add Event"* button;
+- *Event Deletion:* Events can be deleted by choosing the target event and clicking on the *trash* icon present on the preview.
 - *Event Edition:* Events can be edited by choosing the target event and clicking on the *edit* icon present on the preview. This will open a modal similar to the creation one, allowing you to edit the event.
 - *Event focus*: When clicking on an event it will scroll to, and ensure the preview is placed within the visible area of the calendar.
-- *Persistence of Events:* Created events remain assigned to their respective *day/week* even when navigating between different *weeks*
+- *Persistence of Events:* Created events remain assigned to their respective *day/week* even when navigating between different *weeks*.
 
 <br>
 
