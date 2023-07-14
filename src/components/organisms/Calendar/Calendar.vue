@@ -230,6 +230,7 @@ watch(
   () => {
     if (modalStatus) {
       date.value = getCurrentDate();
+      id.value = '';
       startHour.value = undefined;
       endHour.value = undefined;
       showModal.value = true;
