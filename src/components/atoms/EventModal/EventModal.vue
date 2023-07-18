@@ -1,5 +1,9 @@
 <template>
-  <ModalTemplate :show="show" @close="emit('close', true)">
+  <GlobalModalTemplate
+    :show="show"
+    focusOnElement="input"
+    @close="emit('close', true)"
+  >
     <form class="flex flex-col gap-3" ref="formValidation" id="event-form">
       <InputTitle
         ref="titleInput"
@@ -48,12 +52,12 @@
         Create
       </Button>
     </template>
-  </ModalTemplate>
+  </GlobalModalTemplate>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
-import ModalTemplate from '@/components/templates/ModalTemplate';
+import GlobalModalTemplate from '@/components/templates/GlobalModalTemplate';
 import Button from '@/components/molecules/Button';
 import InputDate from '@/components/atoms/InputDate';
 import InputTitle from '@/components/atoms/InputTitle';
@@ -153,3 +157,4 @@ function editEvent(id: string) {
   }
 }
 </script>
+@/components/templates/GlobalModalTemplate
