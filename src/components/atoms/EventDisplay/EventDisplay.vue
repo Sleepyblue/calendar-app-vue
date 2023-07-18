@@ -1,5 +1,6 @@
 <template>
-  <div
+  <PositionedModalTemplate
+    focusOnElement="button"
     id="event-display"
     class="absolute z-20 h-max w-96 overflow-hidden rounded-md bg-slate-100"
     :class="[
@@ -7,57 +8,59 @@
       { 'card-translateY': translate },
       { 'card-translate': horizontalPosition === 'right' && translate },
     ]"
+    @close="emit('close', true)"
   >
-    <header class="flex justify-end gap-2 bg-[#f5e178] p-1">
-      <Button
-        icon="Edit"
-        :size="20"
-        class="display-button relative z-10 rounded-md p-[2px] text-[#F5788D] hover:text-white"
-        @click.prevent="handleEditModal"
-      />
-      <Button
-        icon="Trash"
-        :size="20"
-        class="display-button relative z-10 rounded-md p-[2px] text-[#F5788D] hover:text-white"
-        @click.prevent="handleDelete"
-      />
-      <Button
-        icon="Close"
-        :size="20"
-        class="display-button relative z-10 rounded-md p-[2px] text-[#F5788D] hover:text-white"
-        @click.pevent="closeDisplay"
-      />
-    </header>
-    <main class="flex flex-col gap-6 p-4">
-      <section class="flex flex-col gap-2">
-        <h2 class="text-lg font-semibold">{{ title }}</h2>
-        <div class="flex justify-start gap-8 text-sm text-gray-500">
-          <span class="flex items-center gap-2">
-            <IconLoader name="Calendar" :size="14" class="text-gray-400" />
-            <p>{{ parsedDate }}</p>
-          </span>
-          <span class="flex items-center gap-2">
-            <IconLoader name="Clock" :size="14" class="text-gray-400" />
-            <p>{{ hourRange }}</p>
-          </span>
-        </div>
-      </section>
-      <hr />
-      <section class="flex flex-col gap-2">
-        <h2 class="text-lg font-semibold">Description</h2>
-        <p class="text-sm text-gray-500">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis aut
-          placeat quos ex numquam sed dolores facilis atque exercitationem,
-          corporis ipsum magnam aperiam! Ullam sint praesentium sit architecto
-          suscipit vitae?
-        </p>
-      </section>
-    </main>
-  </div>
+    <template #header>
+      <header class="flex justify-end gap-2 bg-[#f5e178] p-1">
+        <Button
+          icon="Edit"
+          :size="20"
+          class="display-button relative z-10 rounded-md p-[2px] text-[#F5788D] hover:text-white focus-visible:text-white outline-none"
+          @click.prevent="handleEditModal"
+        />
+        <Button
+          icon="Trash"
+          :size="20"
+          class="display-button relative z-10 rounded-md p-[2px] text-[#F5788D] hover:text-white focus-visible:text-white outline-none"
+          @click.prevent="handleDelete"
+        />
+        <Button
+          icon="Close"
+          :size="20"
+          class="display-button relative z-10 rounded-md p-[2px] text-[#F5788D] hover:text-white focus-visible:text-white outline-none"
+          @click.pevent="closeDisplay"
+        />
+      </header>
+    </template>
+    <section class="flex flex-col gap-2">
+      <h2 class="text-lg font-semibold">{{ title }}</h2>
+      <div class="flex justify-start gap-8 text-sm text-gray-500">
+        <span class="flex items-center gap-2">
+          <IconLoader name="Calendar" :size="14" class="text-gray-400" />
+          <p>{{ parsedDate }}</p>
+        </span>
+        <span class="flex items-center gap-2">
+          <IconLoader name="Clock" :size="14" class="text-gray-400" />
+          <p>{{ hourRange }}</p>
+        </span>
+      </div>
+    </section>
+    <hr />
+    <section class="flex flex-col gap-2">
+      <h2 class="text-lg font-semibold">Description</h2>
+      <p class="text-sm text-gray-500">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis aut
+        placeat quos ex numquam sed dolores facilis atque exercitationem,
+        corporis ipsum magnam aperiam! Ullam sint praesentium sit architecto
+        suscipit vitae?
+      </p>
+    </section>
+  </PositionedModalTemplate>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
+import PositionedModalTemplate from '@/components/templates/PositionedModalTemplate';
 import Button from '@/components/molecules/Button';
 import IconLoader from '@/components/atoms/IconLoader';
 import { useCalendarStore } from '@/stores/calendarStore';
@@ -100,7 +103,7 @@ const offsetSum = computed(() => {
 });
 
 const hourRange = computed(() =>
-  formatHoursRange(startHour.value, endHour.value, true)
+  formatHoursRange(startHour.value, endHour.value, true),
 );
 
 const parsedDate = computed(() => convertDateToShortForm(date.value));
@@ -148,7 +151,8 @@ onMounted(() => {
   transform: translate(-108%, -100%);
 }
 
-.display-button:hover::before {
+.display-button:hover::before,
+.display-button:focus-visible::before {
   content: '';
   position: absolute;
   top: 50%;

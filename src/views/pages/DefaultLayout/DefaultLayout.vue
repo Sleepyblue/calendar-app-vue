@@ -53,7 +53,7 @@ function handleHeaderPreview(value: boolean) {
 }
 
 //////////////////////
-// Create a Composable
+// TODO: Create a Composable
 
 function sidebarToggleListener(event: KeyboardEvent) {
   if (event.key === 'z' && event.ctrlKey && event.altKey) {

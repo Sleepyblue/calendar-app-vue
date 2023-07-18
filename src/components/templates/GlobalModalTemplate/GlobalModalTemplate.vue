@@ -3,12 +3,11 @@
     <dialog
       id="modal"
       :open="show"
-      ref="trapRef"
       class="absolute left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center"
       @keydown.esc.exact="closeModal"
       @click.self="closeModal"
     >
-      <div class="w-1/3 rounded-xl bg-slate-100">
+      <div class="w-1/3 rounded-xl bg-slate-100" ref="trapRef">
         <header class="relative h-10 w-full rounded-t-xl bg-[#f5e178]" />
 
         <main class="flex w-full flex-col gap-8 p-4" ref="modalContainer">
@@ -33,9 +32,9 @@ import { onMounted, ref } from 'vue';
 import useFocusTrap from '@/composables/useFocusTrap';
 import Button from '@/components/molecules/Button';
 
-const { show } = defineProps<{
+const { show, focusOnElement } = defineProps<{
   show: boolean;
-  errorMessage?: string;
+  focusOnElement: string;
   attachTo?: string;
   disableTeleport?: boolean;
 }>();
@@ -45,7 +44,7 @@ const emit = defineEmits<{
 }>();
 
 const modalContainer = ref<HTMLDivElement | null>(null);
-const { trapRef, clearFocusTrap, initFocusTrap } = useFocusTrap();
+const { trapRef, clearFocusTrap } = useFocusTrap();
 
 function closeModal() {
   clearFocusTrap();
@@ -54,7 +53,9 @@ function closeModal() {
 
 onMounted(() => {
   // would be good to be dynamic
-  modalContainer.value?.querySelector<HTMLElement>('#modal input')?.focus();
+  modalContainer.value
+    ?.querySelector<HTMLElement>(`#modal ${focusOnElement}`)
+    ?.focus();
 });
 </script>
 
