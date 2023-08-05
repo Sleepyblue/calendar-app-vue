@@ -8,7 +8,7 @@ export function getWeekDates(days: number = 7) {
     const currentDate = new Date();
     const currentDay = currentDate.getDay() === 0 ? 7 : currentDate.getDay();
     const day = currentDate.setDate(
-      currentDate.getDate() + (days === 7 ? -currentDay + i + 1 : +i)
+      currentDate.getDate() + (days === 7 ? -currentDay + i + 1 : +i),
     );
     weekDates.push(day);
   }
@@ -42,7 +42,7 @@ export function getWeekNumber(date: number | string): number {
     (dateObj.getTime() -
       firstDayOfYear.getTime() -
       daysOffset * 24 * 60 * 60 * 1000) /
-      (24 * 60 * 60 * 1000)
+      (24 * 60 * 60 * 1000),
   );
 
   const weekNumber = Math.ceil(diffInDays / 7) + 1; // Add 1 to account for Sunday belonging to the next week
