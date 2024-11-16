@@ -35,17 +35,19 @@ export function getWeekNumber(date: number | string): number {
   const dateObj = new Date(date);
   dateObj.setHours(0, 0, 0, 0); // Set time to 00:00:00 to ensure consistency
 
-  const firstDayOfYear = new Date(dateObj.getFullYear(), 0, 1);
-  const daysOffset = (firstDayOfYear.getDay() + 6) % 7; // Number of days to adjust the start of the year
+  const dayNumber = (dateObj.getDay() + 6) % 7;
+  dateObj.setDate(dateObj.getDate() - dayNumber + 3);
 
-  const diffInDays = Math.floor(
-    (dateObj.getTime() -
-      firstDayOfYear.getTime() -
-      daysOffset * 24 * 60 * 60 * 1000) /
-      (24 * 60 * 60 * 1000),
+  // January 4th is always in week 1 (ISO 8601)
+  const firstWeekofTheYear = new Date(dateObj.getFullYear(), 0, 4);
+
+  const weekNumber = Math.ceil(
+    ((dateObj.getTime() - firstWeekofTheYear.getTime()) /
+      (24 * 60 * 60 * 1000) +
+      firstWeekofTheYear.getDay() +
+      1) /
+      7,
   );
-
-  const weekNumber = Math.ceil(diffInDays / 7) + 1; // Add 1 to account for Sunday belonging to the next week
 
   return weekNumber;
 }
